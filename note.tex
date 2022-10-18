@@ -56,7 +56,15 @@
 \newcommand{\cond}{\middle|}
 \newcommand{\lp}{\left}
 \newcommand{\rp}{\right}
-\newcommand{\pare}[1]{\left(#1\right)}
+\newcommand{\pare}[1]{
+	\ensuremath{\left(#1\right)}
+}
+\newcommand{\deriv}[3][]{
+	\ensuremath{\frac{d^{#1}{#2}}{d{#3}^{#1}}}
+}
+\newcommand{\pderiv}[3][]{
+	\ensuremath{\frac{\partial^{#1}{#2}}{\partial{#3}^{#1}}}
+}
 
 \theoremstyle{definition}
 \newtheorem{example}{Esempio}[section]
@@ -203,27 +211,27 @@ Chiamiamo $\pr(A)$ la probabilità dell'evento $A$, allora abbiamo le seguenti p
 \begin{property}[Joint probability]
 Se $A$ e $B$ sono due eventi indipendenti, allora:
 \begin{equation}
-\pr(A\et B) \equiv \pr(A, B) = \pr(A) \cdot \pr(B).
+\pr\pare{A\et B} \equiv \pr\pare{A, B} = \pr\pare{A} \cdot \pr\pare{B}.
 \end{equation}
 \end{property}
 
 \begin{property}[Union probability]
 Anche detta regola di unione esclusione. Se $A$ e $B$ sono due eventi indipendenti, allora:
 \begin{equation}
-\pr(A\orr B) = \pr(A) + \pr(B) - \pr(A\et B).
+\pr\pare{A\orr B} = \pr\pare{A} + \pr\pare{B} - \pr\pare{A\et B}.
 \end{equation}
 \end{property}
 
 \begin{property}[Conditional probability]
 \begin{equation}
-\pr(A\mid B) = \frac{\pr(A, B)}{\pr(A)}.
+\pr\pare{A\cond B} = \frac{\pr\pare{A, B}}{\pr\pare{A}}.
 \end{equation}
-Se i due eventi sono indipendenti questa si riduce a $\pr(A\mid B) = \pr(A)$.
+Se i due eventi sono indipendenti questa si riduce a $\pr\pare{A\cond B} = \pr\pare{A}$.
 \end{property}
 
 \begin{property}[Conditional independece]
 \begin{equation}
-\pr(A, B \mid C) = \pr(A\mid C) \cdot \pr(B\mid C)
+\pr\pare{A, B \cond C} = \pr\pare{A\cond C} \cdot \pr\pare{B\cond C}
 \end{equation}
 \end{property}
 
@@ -232,26 +240,26 @@ Rappresentiamo con $X$ una variabile di cui non conosciamo il valore e la chiami
 
 Se la variabile è \textbf{discreta} abbiamo un sampling space numerabile e la PMF (\im{probability mass function}):
 \begin{equation}
-p(x) \equiv \pr(X = x).
+p\pare{x} \equiv \pr\pare{X = x}.
 \end{equation}
 Se invece la variabile è \textbf{continua} abbiamo un samplig space non numberabile e la CDF (\im{cumulative distribution function}):
 \begin{equation}
-P(x) \equiv \pr(X \leq x),
+P\pare{x} \equiv \pr\pare{X \leq x},
 \end{equation}
 da cui possiamo definire la PDF (\im{probability density function}):
 \begin{equation}
-p(x) \equiv \frac{d}{dx}P(x),
+p\pare{x} \equiv \deriv{}{x}P\pare{x},
 \end{equation}
 da cui segue:
 \begin{align}
-&\pr(a \leq X \leq b) = \int_a^b p(x) = P(b) - P(a) \\
-&\Longrightarrow \pr(x \leq X \leq x + dx) \approx p(x).
+&\pr\pare{a \leq X \leq b} = \int_a^b p\pare{x} = P\pare{b} - P\pare{a} \\
+&\Longrightarrow \pr\pare{x \leq X \leq x + dx} \approx p\pare{x}.
 \end{align}
-Se la CDF $P(x)$ è monotona crescente allora la sua inversa $P^{-1}(q)$ è detta \textit{quantile}. Il valore $x_q = P^{-1}(q)$ è il valore per cui $\pr(X\leq x_q) < q$, ovvero il quantile $q$ della distribuzione $P$.
+Se la CDF $P\pare{x}$ è monotona crescente allora la sua inversa $P^{-1}(q)$ è detta \textit{quantile}. Il valore $x_q = P^{-1}\pare{q}$ è il valore per cui $\pr\pare{X\leq x_q} < q$, ovvero il quantile $q$ della distribuzione $P$.
 
 Se abbiamo due variabili casuali $X$ e $Y$ allora possiamo definire la \im{joint distribution}:
 \begin{equation}
-p(x, y) = p(X = x, Y = y) \equiv p(X = x\et Y = y).
+p\pare{x, y} = p\pare{X = x, Y = y} \equiv p\pare{X = x\et Y = y}.
 \end{equation}
 Se le due variabili sono indipendenti e con cardinalità finita possiamo definire la \textit{distribuzione marginale} (\im{marginal distribution}) come:
 \begin{equation}
