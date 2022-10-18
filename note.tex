@@ -53,6 +53,10 @@
 
 \newcommand{\et}{\wedge}
 \newcommand{\orr}{\vee}
+\newcommand{\cond}{\middle|}
+\newcommand{\lp}{\left}
+\newcommand{\rp}{\right}
+\newcommand{\pare}[1]{\left(#1\right)}
 
 \theoremstyle{definition}
 \newtheorem{example}{Esempio}[section]
@@ -222,5 +226,58 @@ Se i due eventi sono indipendenti questa si riduce a $\pr(A\mid B) = \pr(A)$.
 \pr(A, B \mid C) = \pr(A\mid C) \cdot \pr(B\mid C)
 \end{equation}
 \end{property}
+
+\subsection{Random variables}
+Rappresentiamo con $X$ una variabile di cui non conosciamo il valore e la chiamiamo \textit{variabile casuale} (\im{random variable}). Il set dei valori che $X$ può assumere è detto \textit{spazio di sampling} (\im{sampling space}). Un evento è dunque un set di risultati dato un sampling space definito.
+
+Se la variabile è \textbf{discreta} abbiamo un sampling space numerabile e la PMF (\im{probability mass function}):
+\begin{equation}
+p(x) \equiv \pr(X = x).
+\end{equation}
+Se invece la variabile è \textbf{continua} abbiamo un samplig space non numberabile e la CDF (\im{cumulative distribution function}):
+\begin{equation}
+P(x) \equiv \pr(X \leq x),
+\end{equation}
+da cui possiamo definire la PDF (\im{probability density function}):
+\begin{equation}
+p(x) \equiv \frac{d}{dx}P(x),
+\end{equation}
+da cui segue:
+\begin{align}
+&\pr(a \leq X \leq b) = \int_a^b p(x) = P(b) - P(a) \\
+&\Longrightarrow \pr(x \leq X \leq x + dx) \approx p(x).
+\end{align}
+Se la CDF $P(x)$ è monotona crescente allora la sua inversa $P^{-1}(q)$ è detta \textit{quantile}. Il valore $x_q = P^{-1}(q)$ è il valore per cui $\pr(X\leq x_q) < q$, ovvero il quantile $q$ della distribuzione $P$.
+
+Se abbiamo due variabili casuali $X$ e $Y$ allora possiamo definire la \im{joint distribution}:
+\begin{equation}
+p(x, y) = p(X = x, Y = y) \equiv p(X = x\et Y = y).
+\end{equation}
+Se le due variabili sono indipendenti e con cardinalità finita possiamo definire la \textit{distribuzione marginale} (\im{marginal distribution}) come:
+\begin{equation}
+p\pare{X = x} = \sum_y p\pare{X=x, Y=y},
+\end{equation}
+altrimenti se sono dipendenti la \textit{distribuzione condizionale} (\im{conditional distribution}) come:
+\begin{equation}
+\begin{split}
+&p\pare{Y=y\cond X=x} = \frac{p\pare{X=x, Y=y}}{p\pare{X=x}} \\
+&\Longrightarrow\quad p\pare{x, y} = p\pare{y\cond x}\cdot p\pare{x},
+\end{split}
+\end{equation}
+da cui segue la \textbf{chain rule}:
+\begin{equation}
+p\pare{\vec{x}_1,D} = p\pare{x_1} p\pare{x_2\cond x_1} p\pare{x_3\cond x_1, x_2}\cdots p\pare{x_D\cond p_{1: D-1}}.
+\end{equation}
+
+Due variabili si dicono \im{marginalmente indipendenti} se
+\begin{equation}
+X\perp Y \quad\Longleftrightarrow\quad p\pare{X, Y} = p\pare{X} p\pare{Y},
+\end{equation}
+mentre si dicono \textbf{condizionalmente indipendenti} se
+\begin{equation}
+X\perp Y \quad\Longleftrightarrow\quad p\pare{X, Y\cond Z} = p\pare{X\cond Z} p\pare{Y\cond Z}. 
+\end{equation}
+
+\subsection{Momenti di una distribuzione}
 
 \end{document}
