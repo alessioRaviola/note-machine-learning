@@ -42,13 +42,6 @@
 
 \lstset{style=mystyle}
 
-\begin{document}
-
-\title{Project / Homework Title}
-\author{Student Name}
-\date{\today}
-
-\maketitle
 
 \renewcommand{\vec}[1]{\boldsymbol{#1}}
 \newcommand{\tens}[1]{\mathsf{#1}}
@@ -58,9 +51,27 @@
 
 \newcommand{\im}[1]{\textsc{#1}}
 
+\newcommand{\et}{\wedge}
+\newcommand{\orr}{\vee}
+
 \theoremstyle{definition}
 \newtheorem{example}{Esempio}[section]
-\crefname{esempio}{Esempio}{Esempi}
+\crefname{example}{Esempio}{Esempi}
+
+\theoremstyle{definition}
+\newtheorem{property}{Proprietà}[subsection]
+\crefname{property}{Proprietà}{Proprietà}
+
+\DeclareMathOperator{\pr}{Pr}
+
+
+\begin{document}
+
+\title{Note del corso\\\textsc{Machine Learning per la fisica applicata\\e fisica delle alte energie}}
+\author{Raviola Alessio}
+\date{\today}
+
+\maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduzione}
@@ -175,5 +186,41 @@ Abbiamo diverse definizioni di probabilità.
 \item[Definizione Bayesiana] La probabilità di un evento è l'\textit{incertezza} con cui l'evento si verifica.
 \item[Definizione Assiomatica] Kolmogorov nel 1933 costruisce la teoria della probabilità a partire da degli assiomi.
 \end{description}
+
+L'incertezza può essere di due tipi:
+\begin{description}
+\item[aleatoria] ovvero è una \im{data uncertanty};
+\item[epistemica] ovvero è una \im{model uncertanty};
+\end{description}
+
+\subsection{Proprietà della probabilità}
+Chiamiamo $\pr(A)$ la probabilità dell'evento $A$, allora abbiamo le seguenti proprietà.
+
+\begin{property}[Joint probability]
+Se $A$ e $B$ sono due eventi indipendenti, allora:
+\begin{equation}
+\pr(A\et B) \equiv \pr(A, B) = \pr(A) \cdot \pr(B).
+\end{equation}
+\end{property}
+
+\begin{property}[Union probability]
+Anche detta regola di unione esclusione. Se $A$ e $B$ sono due eventi indipendenti, allora:
+\begin{equation}
+\pr(A\orr B) = \pr(A) + \pr(B) - \pr(A\et B).
+\end{equation}
+\end{property}
+
+\begin{property}[Conditional probability]
+\begin{equation}
+\pr(A\mid B) = \frac{\pr(A, B)}{\pr(A)}.
+\end{equation}
+Se i due eventi sono indipendenti questa si riduce a $\pr(A\mid B) = \pr(A)$.
+\end{property}
+
+\begin{property}[Conditional independece]
+\begin{equation}
+\pr(A, B \mid C) = \pr(A\mid C) \cdot \pr(B\mid C)
+\end{equation}
+\end{property}
 
 \end{document}
