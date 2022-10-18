@@ -1,0 +1,179 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath,amsthm}
+\usepackage{amssymb}
+\usepackage{anysize}
+\usepackage{listings}
+\usepackage{graphicx}
+
+\usepackage[italian]{babel}
+
+\usepackage{booktabs}
+\usepackage[italian]{cleveref}
+
+\usepackage{siunitx}
+
+\usepackage{xcolor}
+
+\definecolor{Blue}{rgb}{0.2,0.2,0.9}
+\definecolor{Green}{rgb}{0,0.6,0}
+\definecolor{Gray}{rgb}{0.5,0.5,0.5}
+\definecolor{Purple}{rgb}{0.58,0,0.82}
+\definecolor{background}{rgb}{0.98,0.98,0.95}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{background},   
+    commentstyle=\color{Green},
+    keywordstyle=\color{Blue},
+    numberstyle=\tiny\color{Gray},
+    stringstyle=\color{Purple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+
+\lstset{style=mystyle}
+
+\begin{document}
+
+\title{Project / Homework Title}
+\author{Student Name}
+\date{\today}
+
+\maketitle
+
+\renewcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\tens}[1]{\mathsf{#1}}
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2} }
+\newcommand{\HALF}{\frac{1}{2}}
+\newcommand{\DS}{\displaystyle}
+
+\newcommand{\im}[1]{\textsc{#1}}
+
+\theoremstyle{definition}
+\newtheorem{example}{Esempio}[section]
+\crefname{esempio}{Esempio}{Esempi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduzione}
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{quotation}
+A computer program is said to learn from experience E with respecto to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E.
+\end{quotation}
+L'impostazione del corso è di tipo \textit{probabilistico} (statistical learning). Le quantità non note sono trattate come \textbf{variabili aleatorie} (\im{random variables}) a cui viene associata una \textbf{distribuzione di probabilità} (\im{probability distribution}) che descrive il set (pesato) di valori che la variabile può assumere.
+
+Abbiamo tre tipi di machine learning:
+\begin{itemize}
+\item \im{supervised learning};
+\item \im{unsupervised learning};
+\item \im{reinforcement learning};
+\end{itemize}
+il corso si focalizza sui primi due tipi.
+
+\subsection{Supervised learning}
+Il \textbf{compito} T consiste nell'imparare una mappa $f$ dagli input $x\in X$ agli output $y\in Y$. Gli \textbf{input} $x$ sono chiamati \im{features} (o \im{covariates} o \im{predictors}) e sono in genere costituiti da un vettore reale con dimensione fissata, ovvero abbiamo $X\equiv \mathbb{R}^D$. Gli \textbf{output} sono chiamati \im{label} (o \im{target} o \im{response}).
+
+L'\textbf{esperienza} E consiste in un \im{training set} $\mathcal{D}$ di $N$ coppie input-output:
+\begin{equation}
+\mathcal{D} = \left\{ (x_n, y_n) \right\}_{n=1}^N,
+\end{equation}
+dove $N$ è detta \im{sample size}.
+
+La \textbf{performance} dipenda dal compito T.
+
+\subsubsection{Classificazione}
+Problemi comuni in machine learning sono quelli di \textbf{classificazione}. In un problema di questo tipo lo spazio degli output C è un set \textit{non ordinato} di label $y = \{ 1, 2, \cdots, C \}$ dette \im{classes}. Quello che chiede il problema è di predire una classe dato un input, problemi di questo tipo sono detti di \im{pattern recognition}\footnote{Se abbiamo solo due classi, i.e. solo due output, allora il problema si dice di \im{classificazione binaria}}.
+
+\begin{example}[Classificazione specie di iris]
+In generale in \im{image classification} gli input $X$ sono immagini, quindi:
+\begin{equation}
+X = R^D,\quad D = C\times D_1\times D_2,
+\end{equation}
+ove $C = 3$ sono i canali RGB. E cerchiamo una mappa
+\begin{equation}
+f: X \longrightarrow Y
+\end{equation}
+che ci dica a quale delle classi appartenenti a $Y$ l'immagine appartiene. Per le specie di iris però i botanisti hanno individuato 4 caratteristiche numeriche: lunghezza e larghezza del sepalo e del petalo; dunque abbiamo $X = \mathbb{R}^4$. Supponiamo che il traning set sia una collezione di 150 esempi delle 3 specie, 50 per ognuna. I dati possono essere raccolti in una matrice detta \im{design matrix} come \im{tabular data} - come in \Cref{tab:iris}.
+
+\begin{table}
+\centering
+\begin{tabular}{rrrrrl}
+\toprule
+Index & sl [cm] & sw [cm] & pl [cm] & pw [cm] & Label \\
+\midrule
+0 & 5.1 & 3.5 & 1.4 & 0.2 & Setosa \\
+1 & 4.9 & 3.0 & 1.4 & 0.2 & Setosa \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+50 & 7.0 & 3.2 & 4.7 & 1.4 & Versicolor \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+150 & 5.9 & 3.0 & 5.1 & 1.8 & Virginica \\
+\bottomrule
+\end{tabular}
+\caption{Design matrix del training set per classificazione specie di iris.}\label{tab:iris}
+\end{table}
+
+Se abbiamo $N$ elementi nel training set, ognuno con dimensione $D = \dim{X} + \dim{Y}$, allora abbiamo:
+\begin{itemize}
+\item \im{big data} se $N\gg D$, ovvero se il numero di elementi è molto superiore alla loro dimensione;
+\item \im{wide data} se $D\gg N$, ovvero se la dimensione degli elementi è molto superiore al loro numero.
+\end{itemize}
+
+Una buona idea è fare una \textit{esplorazione dei dati} (\im{exploatory data analysis}) per vedere se ci sono dei pattern ovvi, ad esempio tramite grafici. Per grandi basi dati (big data) possiamo procedere mediante \im{dimensionality reduction}:
+\begin{equation}
+f(\vec{x}, \vec{\theta}) = \left.\begin{array}{l}
+\left\{\begin{array}{ll}
+p_l < \qty{2.45}{cm} & \text{Setosa} \\
+\text{Altrimenti} & \left\{\begin{array}{ll}
+p_w < \qty{1.75}{cm} & \text{Versicolor} \\
+\text{Altrimenti} & \text{Virginica} \\
+\end{array}\right.
+\end{array}\right.
+\end{array}\right\} \quad\text{\im{decision tree}},
+\end{equation}
+ove $\vec{\theta}$ è detto \im{threshold parameter}. Questo decision tree è visualizzato in \Cref{fig:iris-decision-tree}. La performance può essere quindi misurata con il \im{miscalssification rate}:
+\begin{equation}
+\mathcal{L}(\theta) \equiv \frac{1}{N}\sum_{n=1}^N \mathbb{I}\left( y_n \neq f(\vec{x_n}, \vec{\theta}) \right),
+\end{equation}
+dove $\mathbb{I}(e)$ è l'\textbf{indicatore binario}
+\begin{equation}
+\mathbb{I}(e) = \left\{\begin{array}{l@{\text{ se } e \text{ è }}l}
+1 & \text{vero} \\
+0 & \text{falso} \\
+\end{array}\right..
+\end{equation}
+Nel caso in cui alcuni errori di classificazione siano più dannosi di altri posso definire una less function $l(y, \hat{y})$ e ridefinire il misclassification rate come l'\im{empirical risk}:
+\begin{equation}
+\mathcal{L}(\theta) \equiv \frac{1}{N}\sum_{n=1}^N l\left( y_n, f(\vec{x_n}, \vec{\theta}) \right).
+\end{equation}
+Un modo che abbiamo per definire il \im{training} (o \im{model fitting}) è modificare questo rischio empirico, ovvero trovare $\hat{\theta}$ tale che
+\begin{equation}
+\mathcal{L}(\hat{\theta}) = \min[\mathcal{L}(\theta)].
+\end{equation}
+
+\begin{figure}
+\includegraphics[width=0.98\textwidth]{Images/iris_decision_tree.PNG}
+\caption{Decision tree per problema di classificazione specie di iris.}\label{fig:iris-decision-tree}
+\end{figure}
+
+\end{example}
+
+\section{Richiami di probabilità}
+Abbiamo diverse definizioni di probabilità.
+\begin{description}
+\item[Definizione Frequentistica] La probabilità di un evento è il rapporto tra il numero di casi favorevoli e il numero di casi possibili.
+\item[Definizione Soggettiva] La probabilità di un evento è il prezzo che un individuo ritiene equo pagare per ricevere 1 se l'evento si verifica e 0 altrimenti.
+\item[Definizione Bayesiana] La probabilità di un evento è l'\textit{incertezza} con cui l'evento si verifica.
+\item[Definizione Assiomatica] Kolmogorov nel 1933 costruisce la teoria della probabilità a partire da degli assiomi.
+\end{description}
+
+\end{document}
