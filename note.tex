@@ -53,11 +53,14 @@
 
 \newcommand{\et}{\wedge}
 \newcommand{\orr}{\vee}
-\newcommand{\cond}{\middle|}
+\newcommand{\cond}{\mid}
 \newcommand{\lp}{\left}
 \newcommand{\rp}{\right}
 \newcommand{\pare}[1]{
 	\ensuremath{\left(#1\right)}
+}
+\newcommand{\spare}[1]{
+	\ensuremath{\left[#1\right]}
 }
 \newcommand{\deriv}[3][]{
 	\ensuremath{\frac{d^{#1}{#2}}{d{#3}^{#1}}}
@@ -66,16 +69,30 @@
 	\ensuremath{\frac{\partial^{#1}{#2}}{\partial{#3}^{#1}}}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheorem{theorem}{Teorema}[section]
+\crefname{theorem}{Teorema}{Teoremi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \theoremstyle{definition}
+
 \newtheorem{example}{Esempio}[section]
 \crefname{example}{Esempio}{Esempi}
 
-\theoremstyle{definition}
 \newtheorem{property}{Proprietà}[subsection]
 \crefname{property}{Proprietà}{Proprietà}
 
-\DeclareMathOperator{\pr}{Pr}
+\newtheorem{definition}{Definizione}[section]
+\crefname{definition}{Definizione}{Definizioni}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\DeclareMathOperator{\pr}{Pr}
+\DeclareMathOperator{\erf}{erf}
+\DeclareMathOperator{\Beta}{Beta}
+\DeclareMathOperator{\Ga}{Ga}
+\DeclareMathOperator{\Exp}{Exp}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\corr}{corr}
 
 \begin{document}
 
@@ -274,7 +291,7 @@ altrimenti se sono dipendenti la \textit{distribuzione condizionale} (\im{condit
 \end{equation}
 da cui segue la \textbf{chain rule}:
 \begin{equation}
-p\pare{\vec{x}_1,D} = p\pare{x_1} p\pare{x_2\cond x_1} p\pare{x_3\cond x_1, x_2}\cdots p\pare{x_D\cond p_{1: D-1}}.
+p\pare{\vec{x}_{1,D}} = p\pare{x_1} p\pare{x_2\cond x_1} p\pare{x_3\cond x_1, x_2}\cdots p\pare{x_D\cond p_{1: D-1}}.
 \end{equation}
 
 Due variabili si dicono \im{marginalmente indipendenti} se
@@ -287,5 +304,249 @@ X\perp Y \quad\Longleftrightarrow\quad p\pare{X, Y\cond Z} = p\pare{X\cond Z} p\
 \end{equation}
 
 \subsection{Momenti di una distribuzione}
+
+\begin{definition}[Media] Definiamo \im{media} di una distribuzione come
+\begin{equation}
+\mathbb{E}\spare{X} \equiv \int_X x\, p\pare{x}dx \qquad\pare{ \mathbb{E}\spare{X_{\text{discreta}}} = \sum_{x\in X} x\, p\pare{x} }.
+\end{equation}
+La media è lineare, ovvero $\mathbb{E}\spare{\sum_{i=1}^n} = \sum_{i=1}^N \mathbb{E}\pare{X_i}$.
+\end{definition}
+
+\begin{definition}[Varianza] Definiamo \im{varianza} di una distribuzione come
+\begin{equation}
+\mathbb{V}\spare{X} \equiv \mathbb{E}\spare{\pare{X - \mu}^2},
+\end{equation}
+che con la definizione di prima possiamo anche scrivere come:
+\begin{equation}
+\begin{split}
+\mathbb{V}\spare{X} &= \int_X \pare{x - \mu}^2\, p\pare{x}dx \\
+&= \int x^2\, p\pare{x}dx \, +\, \mu^2\underbrace{\int p\pare{x}dx}_{=1} \, -\, 2\mu\underbrace{\int x\, p\pare{x}dx}_{=\mu} \\
+&= \mathbb{E}\spare{X^2} - \mu^2.
+\end{split}
+\end{equation}
+Con questa definizione è facile dimostrare l'identità
+\begin{equation}
+\mathbb{V}\spare{aX + b} = a^2\,\mathbb{V}\spare{X},
+\end{equation}
+inoltre anche la varianza è lineare, ma solo se le variabili sono indipendenti.
+\end{definition}
+
+\begin{definition}[Moda]
+Definiamo \im{media} di una distribuzione il valore (o i valori) più probabile, ovvero
+\begin{equation}
+x^\star \;\text{t.c.}\; p\pare{x^\star} = \max p\pare{x},
+\end{equation}
+\end{definition}
+
+Questi stimatori non danno tutta l'informazione contenuta nella distribuzione.
+
+\subsection{Teorema di Bayes}
+
+\begin{theorem}
+Data una quantità non nota $H$ (hypotesis) e dei dati noti $Y=y$ abbiamo che
+\begin{equation}
+p\pare{H=h\cond Y=y} = \frac{p\pare{H=h}p\pare{Y=y\cond H=h}}{p\pare{Y=y}}.
+\end{equation}
+\end{theorem}
+Il teorema segue dall'identità $p\pare{h\cond y} p\pare{y} = p\pare{h} p\pare{y\cond h}$.
+\begin{itemize}
+\item $p\pare{h}$ viene detta \im{prior} ovvero ciò che conosciamo o assumiamo per $H$ \textit{prima} di fare qualunque misura;
+\item $p\pare{y\cond h}$ è la \textit{distribuzione osservata} detta \im{likelihood}, è una funzione di $y$ ad $h$ fisso, ma non è un distribuzione di probabilità;
+\item $p\pare{y}$ è detta \im{marginal likelihood}, indipendente da $h$, funge da costante di normalizzazione \[
+p\pare{Y=y} = \sum_{h'\in H}p\pare{Y=y \cond H=h'} = \sum_{h'\in H}p\pare{H=h', Y=y};
+\]
+\item $p\pare{h\cond y}$ è detta \im{posterior distribution}.
+\end{itemize}
+
+\begin{example}[Monty Hall problem]
+Posso scegliere una di tre porte. Dietro una delle porte c'è un premio. Inizio con il scegliere la porta 1. Ho che la probabilità degli eventi $H_{1,2,3}$ che il premio sia dietro la porta 1, 2 o 3 è
+\[
+p\pare{H_1} = p\pare{H=1} = \frac{1}{3}.
+\]
+Ora una delle porte non scelte da me si apre rivelando che dietro quella non c'è il premio, in base a dove si trova il premio la probabilità degli eventi $Y_{2, 3}$ che si apra una porta o l'altra è data da $p\pare{Y=y, H=h}$:
+\[
+\begin{array}{l@{,\qquad}l@{,\qquad}l}
+p\pare{Y=2, H_1} = \frac{1}{2} & p\pare{Y=2, H_2} = 0 & p\pare{Y=2, H_3} = 1, \\
+\\
+p\pare{Y=3, H_1} = \frac{1}{2} & p\pare{Y=3, H_2} = 1 & p\pare{Y=3, H_3} = 1. \\
+\end{array}
+\]
+Si apre la porta 3. Mi viene data la scelta di cambiare porta prima che venga rivelato dove si trova il premio, per massimizzare la probabilità di vittoria posso calcolare le probabilità condizionate con Bayes. Dai calcoli di prima ho che $p\pare(Y=3) = 1/6 + 1/3 = 1/3$ dunque:
+\begin{equation}
+\begin{split}
+p\pare{H_1\cond Y=3} &= \dfrac{\frac{1}{3}\cdot\frac{1}{2}}{\frac{1}{2}} = \frac{1}{3}, \\
+p\pare{H_2\cond Y=3} &= \dfrac{\frac{1}{3}\cdot 1}{\frac{1}{2}} = \frac{2}{3}, \\
+p\pare{H_3\cond Y=3} &= 0, \\
+\end{split}
+\end{equation}
+dunque mi conviene cambiare porta.
+\end{example}
+
+\subsection{Distribuzione di Gauss}
+La distribuzione di Gauss (o gaussiana) è una tra le più usate in Machine Learning ed è definita come
+\begin{equation}
+\begin{split}
+&P\pare{y} \equiv \pr\pare{Y\leq y},\qquad \pr\pare{a \leq Y \leq b} = P\pare{b} - \pare{a} \\
+&\Phi\pare{y;\mu, \sigma^2} \equiv \int_{-\infty}^y \mathcal{N}\pare{\xi/\mu, \sigma^2}d\xi = \frac{1}{2}\spare{1 + \erf\pare{\frac{\xi}{\sqrt{2}}}},\quad \xi = \frac{y - \mu}{\sigma},
+\end{split}
+\end{equation}
+ove $\erf$ è la \im{Gauss error function} definita come
+\begin{equation}
+\erf\pare{u} \equiv \frac{2}{\sqrt{\pi}} \int_0^\mu e^{-t^2}dt,
+\end{equation}
+mentre $\mathcal{N}$ è la PDF (probability density function) definita come
+\begin{equation}
+\mathcal{N}\pare{y\cond\mu,\sigma^2} \equiv \frac{1}{\sqrt{2\pi\sigma^2}}\exp\spare{-\frac{1}{2\sigma^2}\pare{y-\mu}^2}.
+\end{equation}
+
+Questa distribuzione è popolare per diversi motivi:
+\begin{itemize}
+\item dipende da soli due parametri ed entrambi sono di facile interpretazione;
+\item per il teorema del limite centrale, nel limite $N\longrightarrow\infty$ ogni distribuzione può essere approssimata da una gaussiana;
+\item rappresenta la somma di variabili causali indipendenti;
+\item il numero di assunzioni è minimo.
+\end{itemize}
+
+\subsection{Altre distribuzioni notevoli}
+Abbiamo:
+\begin{itemize}
+\item \im{t-Student} \begin{equation}
+\tau\pare{y\cond\mu, \sigma^2, \nu} \propto \spare{1 + \frac{1}{\nu}\pare{\frac{y-\mu}{\sigma}}^2}^{-\frac{\nu+1}{2}}
+\qquad\left\{\begin{array}{ll}
+\mu & \text{mean} \\
+\sigma & \text{mode} \\
+\nu & \text{degree of formality} \\
+\end{array}\right.;
+\end{equation}
+\item \im{Lorentz (Cauchy)} \begin{equation}
+C\pare{x\cond\mu, \gamma} = \frac{1}{\gamma\pi}\spare{1 + \pare{\frac{x-\mu}{\gamma}}^2}^{-1};
+\end{equation}
+\item \im{Laplace} \begin{equation}
+L\pare{y\cond\mu, b} = \frac{1}{2b}\exp\pare{-\frac{\left|y-\mu\right|}{b}}
+\qquad\left\{\begin{array}{ll}
+\mu & \text{mean} \\
+\mu & \text{mode} \\
+2b^2 & \text{variance} \\
+\end{array}\right.;
+\end{equation}
+\item \im{beta} \begin{equation}
+\Beta\pare{x\cond a, b} = \frac{1}{\beta\pare{a, b}}x^{a-1}\pare{1-x}^{b-1}
+\qquad\left\{\begin{array}{ll}
+\frac{a}{a+b} & \text{mean} \\
+\pare{a-1}\pare{a+b-2} & \text{mode} \\
+\frac{ab}{\pare{a+b}^2\pare{a+b+1}} & \text{variance} \\
+\end{array}\right.;
+\end{equation}
+\item \im{gamma} \begin{equation}
+\Ga\pare{x\cond a, b} = \frac{b^a}{\Gamma\pare{a}}x^{a-1}e^{-xb};
+\end{equation}
+\item \im{experimental} \begin{equation}
+\Exp\pare{x\cond\lambda} = \Ga\pare{x\cond a=1, b=\lambda}
+\end{equation}
+\item \im{chi quadro} \begin{equation}
+\chi^2_\nu\pare{x} = \Ga\pare{x\cond a=\frac{\nu}{2}, b=\frac{1}{2}}
+\end{equation}
+\end{itemize}
+Alcune distribuzioni sono mostrate in \cref{fig:distributions}.
+
+\begin{figure}
+\includegraphics[width=0.98\textwidth]{Images/distributions.PNG}
+\caption{Alcune distribuzioni notevoli.}\label{fig:distributions}
+\end{figure}
+
+\subsection{Osservazioni}
+Supponiamo di avere due variabili causali descritte da distribuzioni gaussiane:
+\begin{equation}
+x_1 \sim \mathcal{N}\pare{\mu_1, \sigma_1^2},\qquad x_2 \sim \mathcal{N}\pare{\mu_2, \sigma_2^2},
+\end{equation}
+e di voler calcolare la PDF della loro somma $y = x_1 + x_2$, allora:
+\begin{equation}
+p\pare{y} = \mathcal{N}\pare{x_1\cond\mu_1, \sigma^2_1} \otimes \mathcal{N}\pare{x_2\cond\mu_2, \sigma^2_2} = \mathcal{N}\pare{y\cond\mu_1 + \mu_2, \sigma^2_1 + \sigma^2_2},
+\end{equation}
+ovvero \textit{la convoluzione di due gaussiane è una gaussiana}.
+
+Supponiamo ora che $x$ sia una variabile casuale e $y = f\pare{x}$ una funzione di essa. Talora è difficile calcolare $p\pare{y}$ analiticamente. Supponiamo ad esempio che $x\sim\Unif\pare{-1,+1}$ e $y=x^2$, possiamo approssimare $p\pare{y}$ con un generatore (uniforme) di numeri casuali e facendone il quadrato per poi prendere la \im{distribuzione empirica}
+\begin{equation}
+p_S\pare{y} = \frac{1}{N_S}\sum_{x=1}^{N_S}\delta\pare{y-y_s}.
+\end{equation}
+Questo è detto \im{metodo monte carlo}.
+
+\subsection{Modelli multivariati}
+\begin{definition}[Covarianza]
+Siano $X$ e $Y$ due variabili. La \im{covarianza} è
+\begin{equation}
+\Cov\spare{X, Y} \equiv \mathbb{E}\spare{\pare{X - \mathbb{E}\pare{E}}\pare{Y - \mathbb{E}\pare{E}}} = \mathbb{E}\spare{XY} - \mathbb{E}\spare{X}\mathbb{E}\spare{Y},
+\end{equation}
+ovvero una matrice $D$-dimensionale, con $D = \dim\pare{\vec{x}}$, che contiene le varianze sulla diagonale.
+\end{definition}
+
+\begin{definition}(Correlazione di Pearson)
+La \im{correlazione di Pearson} tra le due variabili $X$ e $Y$ si definisce come
+\begin{equation}
+\rho \equiv \corr\spare{X, Y} = \frac{\Cov\spare{X, Y}}{\sqrt{\mathbb{V}\spare{X}\mathbb{V}\spare{Y}}}.
+\end{equation}
+\end{definition}
+
+Possiamo scrivere
+\begin{equation}
+\Cov\spare{X} = \pare{\begin{array}{cccc}
+\mathbb{V}\spare{X_1} & \Cov\spare{X_1, X_2} & \cdots & \Cov\spare{X_1, X_D} \\
+\Cov\spare{X_2, X_1} & \mathbb{V}\spare{X_2} & \cdots & \Cov\spare{X_2, X_D} \\
+\vdots & \vdots & \ddots & \vdots \\
+\Cov\spare{X_D, X_1} & \Cov\spare{X_D, X_2} & \cdots & \mathbb{V}\spare{X_D} \\
+\end{array}}
+\end{equation}
+e
+\begin{equation}
+\corr\pare{x} = \pare{\begin{array}{cccc}
+1 & \frac{\mathbb{E}\spare{\pare{x_1-\mu_1}\pare{x_2-\mu_2}}}{\sigma_1\sigma_2} & \cdots & \frac{\mathbb{E}\spare{\pare{x_1-\mu_1}\pare{x_D-\mu_D}}}{\sigma_1\sigma_D} \\
+\frac{\mathbb{E}\spare{\pare{x_2-\mu_2}\pare{x_1-\mu_1}}}{\sigma_2\sigma_1} & 1 & \cdots & \frac{\mathbb{E}\spare{\pare{x_2-\mu_2}\pare{x_D-\mu_D}}}{\sigma_2\sigma_D} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\mathbb{E}\spare{\pare{x_D-\mu_D}\pare{x_1-\mu_1}}}{\sigma_D\sigma_1} & \frac{\mathbb{E}\spare{\pare{x_D-\mu_D}\pare{x_2-\mu_2}}}{\sigma_D\sigma_2} & \cdots & 1 \\
+\end{array}}.
+\end{equation}
+
+\subsubsection{Osservazioni}
+\begin{itemize}
+\item Il fatto che due variabili non siano correlate non vuol dire che siano indipendenti, tuttavia due variabili indipendenti sono necessariamente non correlate;
+\item correlazione non implica causalità;
+\item una correlazione che appare simile in diversi set di dati può sparire (o divenire opposta) se i dati sono combinati, questo è noto come \textit{Simpson's paradox}.
+\end{itemize}
+
+\subsection{Distribuzione gaussiana multivariata}
+La definizione che abbiamo dato di distribuzione gaussiana si estende a più variabili. Innanzitutto definiamo la PDF
+\begin{equation}
+\mathcal{N}\pare{\vec{y}\cond\vec{\mu}, \Sigma} \equiv \frac{1}{\pare{2\pi}^{D/2}\left|\Sigma\right|^{1/2}}\exp\left\{-\frac{1}{2}\pare{\vec{y}-\vec{\mu}}^T\Sigma^{-1}\pare{\vec{y}-\vec{\mu}}\right\},
+\end{equation}
+dove $\Sigma = \Cov\spare{\vec{y}}$.
+
+Supponiamo di avere due variabili aleatorie $\vec{y}_1$ e $\vec{y}_2$. Si può definire la distribuzione \im{jointly gaussian}. Con
+\[
+\vec{\mu} = \pare{\begin{array}{c}
+\mu_1 \\
+\mu_2
+\end{array}},\qquad
+\Sigma = \pare{\begin{array}{cc}
+\Sigma_{11} & \Sigma_{12} \\
+\Sigma_{21} & \Sigma_{22}
+\end{array}},\qquad
+\Lambda = \Sigma^{-1}
+\]
+le distribuzioni marginali sono
+\begin{equation}
+p\pare{\vec{y}_1} = \mathcal{N}\pare{\vec{y}_1\cond\vec{\mu}_1, \Sigma_{11}},\qquad p\pare{\vec{y}_2} = \mathcal{N}\pare{\vec{y}_2\cond\vec{\mu}_2, \Sigma_{22}}
+\end{equation}
+e la probabilità condizionata
+\begin{equation}
+p\pare{\vec{y}_1\cond\vec{y}_2} = \mathcal{N}\pare{\vec{y}_1\cond\vec{\mu}_{1\cond 2}, \Sigma_{1\cond 2}},
+\end{equation}
+con
+\[
+\vec{\mu}_{1\cond 2} = \vec{\mu}_1 + \Sigma_{12}\Sigma_{22}^{-1}\pare{\vec{y}_2 - \vec{\mu_2}},\qquad \Sigma_{1\cond 2} = \Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}=\Lambda_{11}^{-1},
+\]
+queste sono tutte gaussiane.
+
+
+
 
 \end{document}

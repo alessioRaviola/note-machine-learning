@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.10) (preloaded format=pdflatex 2022.10.17)  19 OCT 2022 00:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.10) (preloaded format=pdflatex 2022.10.17)  19 OCT 2022 03:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -308,46 +308,48 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1374.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1375.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1376.
 )
-\c@example=\count300
-\c@property=\count301
+\c@theorem=\count300
+\c@example=\count301
+\c@property=\count302
+\c@definition=\count303
 
 (C:\Users\aless\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
 File: l3backend-pdftex.def 2022-09-28 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count302
+\l__color_backend_stack_int=\count304
 \l__pdf_internal_box=\box64
 ) (note.aux)
 \openout1 = `note.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 80.
-LaTeX Font Info:    ... okay on input line 80.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 80.
-LaTeX Font Info:    ... okay on input line 80.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 80.
-LaTeX Font Info:    ... okay on input line 80.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 80.
-LaTeX Font Info:    ... okay on input line 80.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 80.
-LaTeX Font Info:    ... okay on input line 80.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 80.
-LaTeX Font Info:    ... okay on input line 80.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 80.
-LaTeX Font Info:    ... okay on input line 80.
-\c@lstlisting=\count303
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+\c@lstlisting=\count305
 
 (C:\Users\aless\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count304
+\scratchcounter=\count306
 \scratchdimen=\dimen181
 \scratchbox=\box65
-\nofMPsegments=\count305
-\nofMParguments=\count306
+\nofMPsegments=\count307
+\nofMParguments=\count308
 \everyMPshowfont=\toks30
-\MPscratchCnt=\count307
+\MPscratchCnt=\count309
 \MPscratchDim=\dimen182
-\MPnumerator=\count308
-\makeMPintoPDFobject=\count309
+\MPnumerator=\count310
+\makeMPintoPDFobject=\count311
 \everyMPtoPDFconversion=\toks31
 )
 (C:\Users\aless\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
@@ -360,8 +362,8 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 fg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-LaTeX Info: Redefining \it@ocap on input line 80.
-LaTeX Info: Redefining \it@ccap on input line 80.
+LaTeX Info: Redefining \it@ocap on input line 97.
+LaTeX Info: Redefining \it@ccap on input line 97.
 
 
 File italian.ldf warning: 
@@ -369,17 +371,17 @@ italian.ldf    With OT1 encoding guillemets are poorly faked
 italian.ldf    Use T1 encoding
 italian.ldf    or specify a font with command \CaporaliFrom
 italian.ldf    See the documentation concerning the babel-italian typesetting 
-italian.ldf    on input line 80.
+italian.ldf    on input line 97.
 
 Package translations Info: no dictionary file `translations-basic-dictionary-it
-alian.trsl' found. on input line 80.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 86.
-
+alian.trsl' found. on input line 97.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 103
+.
 (C:\Users\aless\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 86.
-
+LaTeX Font Info:    Trying to load font information for U+msb on input line 103
+.
 
 (C:\Users\aless\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -390,47 +392,58 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 <Images/iris_decision_tree.PNG, id=20, 772.38562pt x 415.5525pt>
 File: Images/iris_decision_tree.PNG Graphic file (type png)
 <use Images/iris_decision_tree.PNG>
-Package pdftex.def Info: Images/iris_decision_tree.PNG  used on input line 187.
+Package pdftex.def Info: Images/iris_decision_tree.PNG  used on input line 204.
 
 (pdftex.def)             Requested size: 446.13727pt x 240.0251pt.
  [2]
-[3 <./Images/iris_decision_tree.PNG>] [4] (note.aux
+[3 <./Images/iris_decision_tree.PNG>] [4] [5] [6]
+<Images/distributions.PNG, id=44, 703.12688pt x 493.0922pt>
+File: Images/distributions.PNG Graphic file (type png)
+<use Images/distributions.PNG>
+Package pdftex.def Info: Images/distributions.PNG  used on input line 453.
+(pdftex.def)             Requested size: 446.13727pt x 312.8693pt.
+ [7] [8 <./Images/distributions.PNG>] [9] (note.aux
 Package cleveref Info: loaded `italian' language definitions on input line 4.
 Package cleveref Info: loaded `italian' language definitions on input line 5.
 ) ) 
 Here is how much of TeX's memory you used:
- 11423 strings out of 475385
- 234893 string characters out of 2776906
- 595186 words of memory out of 3000000
- 32698 multiletter control sequences out of 15000+600000
+ 11459 strings out of 475385
+ 235314 string characters out of 2776906
+ 601980 words of memory out of 3000000
+ 32733 multiletter control sequences out of 15000+600000
  481757 words of font info for 74 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 71i,21n,77p,514b,778s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 71i,22n,77p,514b,778s stack positions out of 10000i,1000n,20000p,200000b,80000s
  <C:\Users\aless\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcr
 m1000.pk><C:/Users/aless/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
 nts/cm/cmbx10.pfb><C:/Users/aless/AppData/Local/Programs/MiKTeX/fonts/type1/pub
 lic/amsfonts/cm/cmbx12.pfb><C:/Users/aless/AppData/Local/Programs/MiKTeX/fonts/
-type1/public/amsfonts/cm/cmcsc10.pfb><C:/Users/aless/AppData/Local/Programs/MiK
-TeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/aless/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/aless/AppData/
-Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/aless/
-AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Us
-ers/aless/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmm
-ib7.pfb><C:/Users/aless/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
-ts/cm/cmr10.pfb><C:/Users/aless/AppData/Local/Programs/MiKTeX/fonts/type1/publi
-c/amsfonts/cm/cmr12.pfb><C:/Users/aless/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/public/amsfonts/cm/cmr17.pfb><C:/Users/aless/AppData/Local/Programs/MiKTeX/f
-onts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/aless/AppData/Local/Programs/M
-iKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/aless/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/aless/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/aless/A
-ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users
-/aless/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-<C:/Users/aless/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbo
-ls/msbm10.pfb>
-Output written on note.pdf (4 pages, 321822 bytes).
+type1/public/amsfonts/cm/cmbx7.pfb><C:/Users/aless/AppData/Local/Programs/MiKTe
+X/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Users/aless/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/aless/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/aless/
+AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/User
+s/aless/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb>
+<C:/Users/aless/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cm
+mib10.pfb><C:/Users/aless/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
+onts/cmextra/cmmib7.pfb><C:/Users/aless/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/public/amsfonts/cm/cmr10.pfb><C:/Users/aless/AppData/Local/Programs/MiKTeX/f
+onts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/aless/AppData/Local/Programs/
+MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/aless/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/aless/AppData/
+Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/aless/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/
+aless/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:
+/Users/aless/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy1
+0.pfb><C:/Users/aless/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
+/cm/cmsy5.pfb><C:/Users/aless/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+amsfonts/cm/cmsy7.pfb><C:/Users/aless/AppData/Local/Programs/MiKTeX/fonts/type1
+/public/amsfonts/cm/cmti10.pfb><C:/Users/aless/AppData/Local/Programs/MiKTeX/fo
+nts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/aless/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
+Output written on note.pdf (9 pages, 495453 bytes).
 PDF statistics:
- 113 PDF objects out of 1000 (max. 8388607)
+ 157 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
