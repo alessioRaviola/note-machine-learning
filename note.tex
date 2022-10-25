@@ -43,17 +43,33 @@
 \lstset{style=mystyle}
 
 
+%%% OPERATORS
+\DeclareMathOperator{\pr}{Pr}
+\DeclareMathOperator{\erf}{erf}
+\DeclareMathOperator{\Beta}{Beta}
+\DeclareMathOperator{\Ga}{Ga}
+\DeclareMathOperator{\Exp}{Exp}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\corr}{corr}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator{\NLL}{NLL}
+%%%
+
+%% MATH MISC
 \renewcommand{\vec}[1]{\boldsymbol{#1}}
 \newcommand{\tens}[1]{\mathsf{#1}}
 \newcommand{\pd}[2]{\frac{\partial #1}{\partial #2} }
 \newcommand{\HALF}{\frac{1}{2}}
 \newcommand{\DS}{\displaystyle}
-
+%% TEXT
 \newcommand{\im}[1]{\textsc{#1}}
-
+%% LOGIC
 \newcommand{\et}{\wedge}
 \newcommand{\orr}{\vee}
 \newcommand{\cond}{\mid}
+%% PARENTESIS
 \newcommand{\lp}{\left}
 \newcommand{\rp}{\right}
 \newcommand{\pare}[1]{
@@ -62,12 +78,18 @@
 \newcommand{\spare}[1]{
 	\ensuremath{\left[#1\right]}
 }
+%% DERIVATE
 \newcommand{\deriv}[3][]{
 	\ensuremath{\frac{d^{#1}{#2}}{d{#3}^{#1}}}
 }
 \newcommand{\pderiv}[3][]{
 	\ensuremath{\frac{\partial^{#1}{#2}}{\partial{#3}^{#1}}}
 }
+%% TALE CHE
+\newcommand{\tc}{\ensuremath{\;\text{t.c.}\;}}
+\newcommand{\tcq}{\ensuremath{\quad\text{t.c.}\quad}}
+%% TEXT IN MATH
+\newcommand{\MLE}{\ensuremath{\text{MLE}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newtheorem{theorem}{Teorema}[section]
@@ -84,15 +106,6 @@
 \newtheorem{definition}{Definizione}[section]
 \crefname{definition}{Definizione}{Definizioni}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\DeclareMathOperator{\pr}{Pr}
-\DeclareMathOperator{\erf}{erf}
-\DeclareMathOperator{\Beta}{Beta}
-\DeclareMathOperator{\Ga}{Ga}
-\DeclareMathOperator{\Exp}{Exp}
-\DeclareMathOperator{\Unif}{Unif}
-\DeclareMathOperator{\Cov}{Cov}
-\DeclareMathOperator{\corr}{corr}
 
 \begin{document}
 
@@ -134,7 +147,7 @@ La \textbf{performance} dipenda dal compito T.
 \subsubsection{Classificazione}
 Problemi comuni in machine learning sono quelli di \textbf{classificazione}. In un problema di questo tipo lo spazio degli output C è un set \textit{non ordinato} di label $y = \{ 1, 2, \cdots, C \}$ dette \im{classes}. Quello che chiede il problema è di predire una classe dato un input, problemi di questo tipo sono detti di \im{pattern recognition}\footnote{Se abbiamo solo due classi, i.e. solo due output, allora il problema si dice di \im{classificazione binaria}}.
 
-\begin{example}[Classificazione specie di iris]
+\begin{example}[Classificazione specie di iris]\label{ex:iris}
 In generale in \im{image classification} gli input $X$ sono immagini, quindi:
 \begin{equation}
 X = R^D,\quad D = C\times D_1\times D_2,
@@ -181,7 +194,7 @@ p_w < \qty{1.75}{cm} & \text{Versicolor} \\
 \end{array}\right\} \quad\text{\im{decision tree}},
 \end{equation}
 ove $\vec{\theta}$ è detto \im{threshold parameter}. Questo decision tree è visualizzato in \Cref{fig:iris-decision-tree}. La performance può essere quindi misurata con il \im{miscalssification rate}:
-\begin{equation}
+\begin{equation}\label{eq:misclassification-rate-simple}
 \mathcal{L}(\theta) \equiv \frac{1}{N}\sum_{n=1}^N \mathbb{I}\left( y_n \neq f(\vec{x_n}, \vec{\theta}) \right),
 \end{equation}
 dove $\mathbb{I}(e)$ è l'\textbf{indicatore binario}
@@ -191,8 +204,8 @@ dove $\mathbb{I}(e)$ è l'\textbf{indicatore binario}
 0 & \text{falso} \\
 \end{array}\right..
 \end{equation}
-Nel caso in cui alcuni errori di classificazione siano più dannosi di altri posso definire una less function $l(y, \hat{y})$ e ridefinire il misclassification rate come l'\im{empirical risk}:
-\begin{equation}
+Nel caso in cui alcuni errori di classificazione siano più dannosi di altri posso definire una loss function $l(y, \hat{y})$ e ridefinire il misclassification rate come l'\im{empirical risk}:
+\begin{equation}\label{eq:misclassification-rate}
 \mathcal{L}(\theta) \equiv \frac{1}{N}\sum_{n=1}^N l\left( y_n, f(\vec{x_n}, \vec{\theta}) \right).
 \end{equation}
 Un modo che abbiamo per definire il \im{training} (o \im{model fitting}) è modificare questo rischio empirico, ovvero trovare $\hat{\theta}$ tale che
@@ -546,7 +559,100 @@ con
 \]
 queste sono tutte gaussiane.
 
+\section{Richiami di statistica}
+Nella sezione precedente abbiamo assunto come noti i parametri $\vec{\theta}$, in questa sezione impariamo come è possibile imparare questi parametri a partire dai dati (training set) $\mathcal{D}$. Come abbiamo visto nell'\Cref{ex:iris}, il problema si riduce a trovare $\hat{\theta}$ tale che minimizzi il misclassification rate, \Cref{eq:misclassification-rate}, ovvero:
+\[
+\hat{\theta} \quad\text{t.c.}\quad \mathcal{L}(\hat{\theta}) = \min\spare{\mathcal{L}\pare{\theta}} \equiv \min\spare{\frac{1}{N}\sum_{n=1}^N l\pare{y_n, f\pare{\vec{x_n}, \vec{\theta}}}}.
+\]
 
+\subsection{Maximum likelihood estimation (MLE)}
+\begin{definition}[Maximum likelihood estimation]
+Definitiamo la MLE, \im{maximum likelihood estimation}, come il valore di $\theta$ che massimizza la probabilità condizionata di aver ottenuto il set di dati $\mathcal{D}$, ovvero:
+\begin{equation}
+\hat{\theta}_{\text{MLE}} \equiv \argmax_{\vec{\theta}} p\pare{\mathcal{D}\cond\vec{\theta}}.
+\end{equation}
+Se i dati sono campioni indipendenti della stessa distribuzione, allora possiamo anche scrivere
+\begin{equation}
+p\pare{\mathcal{D}\cond\vec{\theta}} = \prod_{n=1}^N p\pare{\vec{y}_n \cond \vec{x}_n, \vec{\theta}}.
+\end{equation}
+Definiamo inoltre la NLL, \textsc{negative log-likelihood}, da usare come loss function come:
+\begin{equation}
+l\pare{\vec{\theta}} \equiv -\log p\pare{\mathcal{D}\cond\vec{\theta}} = -\sum_{n=1}^N \log p\pare{\vec{y}_n \cond \vec{x}_n , \vec{\theta}}.
+\end{equation}
+\end{definition}
 
+Con queste definizioni abbiamo che la MLE è data
+\begin{itemize}
+\item per supervised learning da:
+\begin{equation}
+\hat{\theta}_{\text{MLE}} = \argmin_{\vec{\theta}} -\sum_{n=1}^N \log p\pare{\vec{y}_n \cond \vec{x}_n, \vec{\theta}};
+\end{equation}
+\item per unsupervised learning da:
+\begin{equation}
+\hat{\theta}_{\text{MLE}} = \argmin_{\vec{\theta}} -\sum_{n=1}^N \log p\pare{\vec{y}_n \cond \vec{\theta}}.
+\end{equation}
+\end{itemize}
+
+Possiamo giustificare l'uso della MLE pensandola come un'approssimazione del \textit{posterior} Bayesiano dato un \textit{prior} uniforme.
+
+\begin{example}
+Se abbiamo
+\[
+p\pare{\vec{\theta}\cond\mathcal{D}} = \delta\pare{\vec{\theta}- \hat{\theta}_{\text{MAP}}}
+\]
+con $\hat{\theta}$ il posterior, allora
+\[
+\hat{\theta}_{\text{MAP}} = \argmin_{\vec{\theta}}-\log p\pare{\vec{\theta}\cond\mathcal{D}} = \argmin_{\vec{\theta}} -\log p\pare{\mathcal{D}\cond\vec{\theta}} -\log p\pare{\vec{\theta}},
+\]
+ed essendo $p\pare{\vec{\theta}} = 1$ abbiamo
+\[
+\pushQED{\qed}
+\hat{\theta}_{\text{MAP}} = \argmin_{\vec{\theta}} -\log p\pare{\mathcal{D}\cond\vec{\theta}} = \hat{\theta}_{\text{MLE}}.\qedhere
+\popQED
+\]
+\end{example}
+
+\subsubsection{Distribuzione normale}
+Supponiamo ora di avere una variabile casuale $Y$ distribuita normalmente, i.e. $Y\sim \mathcal{N}\pare{\mu, \sigma^2}$, e sia $\mathcal{D} = \left\{ y_n \tc n=1,\cdots,N \right\}$ un dataset con punti campionati indipendentemente, allora:
+\begin{equation}
+\begin{split}
+\NLL\pare{\mu, \sigma^2} &= -\sum_{n=1}^{N_D}\log\spare{\pare{\frac{1}{2\pi\sigma^2}}^\HALF \exp\pare{-\frac{1}{2\sigma^2}\pare{y_n-\mu}^2}} \\
+&=\frac{1}{2\sigma}\sum_{n=1}^{N_D}\pare{y_n - \mu}^2 + \frac{N_D}{2}\log\pare{2\pi\sigma^2}.
+\end{split}
+\end{equation}
+Ora estremizzando otteniamo
+\begin{align}
+\pderiv{}{\mu}\NLL\pare{\mu, \sigma^2} = 0 &\;\Longleftrightarrow\; \hat{\mu}_{\MLE} = \frac{1}{N_D}\sum_{n=1}^{N_D} y_n = \bar{y}\\
+\pderiv{}{\sigma^2}\NLL\pare{\mu, \sigma^2} = 0 &\;\Longleftrightarrow\; \hat{\sigma}^2_\MLE = \frac{1}{N_D}\sum_{n=1}^{N_D}\pare{y_n - \hat{\mu}_\MLE}^2 = \frac{1}{N_D}\sum_{n=1}^{N_D}y_n^2 - \bar{y}^2 = s^2 - \bar{y}^2.
+\end{align}
+
+\subsubsection{Distribuzione normale multivariata}
+Per una distribuzione multivariata i risultati sono analoghi. Abbiamo
+\begin{equation}
+l\pare{\vec{\mu}, \Sigma} = \log p\pare{\mathcal{D}\cond\vec{\mu},\Sigma} = \frac{N_D}{2}\log\left|\Lambda\right| = -\HALF\sum_{n=1}^{N_D}\pare{\vec{y}_n - \vec{\mu}}^T \Lambda\pare{\vec{y}_n - \vec{\mu}}
+\end{equation}
+dove $\Lambda = \Sigma^{-1}$ è la \im{precision matrix}. Dall'estremizzazione segue, come prima, l'empirical mean $\hat{\vec{\mu}}$ e l'empirical covariance matrix $\hat{\Sigma}$:
+\begin{align}
+\hat{\vec{\mu}} &= \frac{1}{N_D}\sum_{n=1}^{N_D}\vec{y_n} = \bar{\vec{y}} \\
+\hat{\Sigma} &= \frac{1}{N_D}\sum_{n=1}^{N_D}\pare{\bar{\vec{y}}_n - \bar{\vec{y}}}\pare{\bar{\vec{y}}_n - \bar{\vec{y}}}^T 
+\end{align}
+
+\subsection{Empirical risk minimization (ERM)}
+La MLE può essere generalizzata sostituendo la loss function logaritmica NLL con qualunque altra funzione $l$:
+\begin{equation}
+\mathcal{L}\pare{\vec{\theta}} = \frac{1}{N}\sum_{n=1}^N l\pare{\vec{y}_n, \vec{\theta}; \vec{x}_n}.
+\end{equation}
+Questo processo di cambiare loss function è noto come ERM, \im{empirical risk minimization}. %% ???
+
+\begin{example}[ERM per problema di classificazione]
+In un problema di classificazione avremo una loss function
+\begin{equation}
+l_{01}\pare{\vec{y}_n, \vec{\theta}; \vec{x}_n} = \left\{\begin{array}{l@{\quad\text{se}\quad}l}
+1 & \vec{y}_n = f\pare{\vec{x}_n; \vec{\theta}} \\
+0 & \vec{y}_n \neq f\pare{\vec{x}_n; \vec{\theta}} 
+\end{array}\right.
+\end{equation}
+dove $f\pare{\vec{x}, \vec{\theta}}$ è un predittore.
+\end{example}
 
 \end{document}
