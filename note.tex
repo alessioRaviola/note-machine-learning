@@ -110,6 +110,9 @@
 
 \newtheorem{definition}{Definizione}[section]
 \crefname{definition}{Definizione}{Definizioni}
+
+\newtheorem{observation}{Osservazione}[subsection]
+\crefname{observation}{Osservazione}{Osservazioni}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
@@ -693,7 +696,7 @@ Ad esempio per la gaussiana abbiamo:
 &\mu_1 = \mu = \bar{y}, \\
 &\mu_2 = \sigma^2 + \mu^2 = s^2.
 \end{align*}
-In questo caso abbiamo che MOM $=$ MLE, ma questo non è vero in generale (ad esempio non è vero per la distribuzione uniforme).
+In questo caso abbiamo che MOM \(=\) MLE, ma questo non è vero in generale (ad esempio non è vero per la distribuzione uniforme).
 
 \subsubsection{Online recursive estimation}
 Se tutto il dataset $\mathcal{D}$ è noto e disponibile prima che inizi il processo di learning si dice che si fa \im{batch learning}. In alcuni casi però il dataset è disponibile in blocchi e si dice che si fa \im{online learning}. Si ha che $\hat{\vec{\theta}}_{t-1}$ è la predizione dato il blocco $\mathcal{D}_{1:t-1}$, quello che vogliamo fare è trovare $\vec{\theta}_t = f(\hat{\vec{\theta}}_{t-1}, \vec{y}_t)$ con un update ricorsivo.
@@ -719,7 +722,7 @@ dove $\lambda$ è detto \im{regularization parameter} e $C\pare{\vec{\theta}}$ �
 C\pare{\vec{\theta}} = -\log{p\pare{\vec{\theta}}}.
 \]
 
-Per $\lambda = 1$ e riscalando $p\pare{\vec{\theta}}$ si ha la NLL:
+Per \(\lambda = 1\) e riscalando \(p\pare{\vec{\theta}}\) si ha la NLL:
 \begin{equation}
 \NLL\pare{\vec{\theta}, \lambda} = - \spare{\sum_{n=1}^N\log{p\pare{\vec{y}_n\cond\vec{x}_n,\vec{\theta}}} + \log{p\pare{\vec{\theta}}}} = -\spare{\log{p\pare{\mathcal{D}\cond\vec{\theta}}} + \log{p\pare{\vec{\theta}}}},
 \end{equation}
@@ -730,8 +733,8 @@ che implica:
 Questa stima si chiama MAP (\im{maximum a posterior}) estimation.
 
 
-\subsubsection{Come scegliere $\lambda$}
-Un valore (troppo) piccolo per $\lambda$ equivale a minimizzare il rischio empirico (\im{overfitting}); un valore (troppo) grande equivale a essere troppo vicini al prior (\im{underfitting}). Una soluzione è dividere il training set in due classi: una di training ($\mathcal{D}_{\text{train}},\,80\%$) ed una di validation ($\mathcal{D}_{\text{val}},\,20\%$). Si va quindi a fittare il modello su $\mathcal{D}_{\text{train}}$ per ogni setting $\lambda$ e poi a valutare la performance del modello ottenuto su $\mathcal{D}_{\text{val}}$. Si prende dunque il valore di $\lambda$ per cui si è ottenuta la performance migliore.
+\subsubsection{Come scegliere \(\lambda\)}
+Un valore (troppo) piccolo per \(\lambda\) equivale a minimizzare il rischio empirico (\im{overfitting}); un valore (troppo) grande equivale a essere troppo vicini al prior (\im{underfitting}). Una soluzione è dividere il training set in due classi: una di training ($\mathcal{D}_{\text{train}},\,80\%$) ed una di validation ($\mathcal{D}_{\text{val}},\,20\%$). Si va quindi a fittare il modello su $\mathcal{D}_{\text{train}}$ per ogni setting $\lambda$ e poi a valutare la performance del modello ottenuto su $\mathcal{D}_{\text{val}}$. Si prende dunque il valore di $\lambda$ per cui si è ottenuta la performance migliore.
 
 \begin{definition}[Regularized empirical risk]
 Definiamo l'\im{empirical risk regolarizzato} come:
@@ -744,19 +747,145 @@ Il processo che seguiamo è quindi il seguente:
 \begin{enumerate}
 \item costruiamo il modello: $\hat{\vec{\theta}}_\lambda\pare{\mathcal{D}_\text{train}} = \argmin_{\vec{\theta}} R_\lambda\pare{\vec{\theta}, \mathcal{D}_{\text{train}}}\;\forall\lambda$;
 \item calcoliamo il validation risk: $R_\lambda^\text{val} = R_0\pare{\hat{\vec{\theta}}_\lambda\pare{\mathcal{D}_\text{train}}, \mathcal{D}_\text{val}}$;
-\item prendiamo il $\lambda$ che ha dato la miglior performance: $\lambda^\star = \argmin_{\lambda\in S} R_\lambda^\text{val}$;
-\item si ri-fitta il modello su $\mathcal{D} = \mathcal{D}_\text{train}\cup\mathcal{D}_\text{val}$ usando $\lambda=\lambda^\star$;
-\item si ottengono i parametri $\hat{\vec{\theta}}^\star = \argmin_{\vec{\theta}} R_{\lambda^\star}\pare{\vec{\theta}, \mathcal{D}}$.
+\item prendiamo il \(\lambda\) che ha dato la miglior performance: \(\lambda^\star = \argmin_{\lambda\in S} R_\lambda^\text{val}\);
+\item si ri-fitta il modello su \(\mathcal{D} = \mathcal{D}_\text{train}\cup\mathcal{D}_\text{val}\) usando \( \lambda=\lambda^\star \);
+\item si ottengono i parametri \(\hat{\vec{\theta}}^\star = \argmin_{\vec{\theta}} R_{\lambda^\star}\pare{\vec{\theta}, \mathcal{D}}\).
 \end{enumerate}
 
-Se il dataset è piccolo, eliminare il $20\%$ dei dati può essere dannoso e si procede quindi con la \im{cross validation}. Questa consiste nel dividere il dataset in $K$ \im{fold} e per ognuno allenare il modello su tutti i fold meno il $k$-esimo, il quale viene usato come test fold. Si definisce l'empirical risk regolarizzato per cross validation:
-\begin{equation}
-R_\lambda^\text{CV} \equiv \frac{1}{K}\sum_{k=1}^K R_0\pare{\hat{\vec{\theta}}_\lambda\pare{\mathcal{D} - \mathcal{D}_k}, \mathcal{D}_k}
-\end{equation}
+    Se il dataset è piccolo, eliminare il \( 20\% \) dei dati può essere dannoso e si procede quindi con la \im{cross validation}. Questa consiste nel dividere il dataset in $K$ \im{fold} e per ognuno allenare il modello su tutti i fold meno il \(k\)-esimo, il quale viene usato come test fold. Si definisce l'empirical risk regolarizzato per cross validation:
+    \begin{equation}
+    R_\lambda^\text{CV} \equiv \frac{1}{K} \sum_{k=1}^K R_0\pare{\hat{\vec{\theta}}_\lambda\pare{\mathcal{D} - \mathcal{D}_k}, \mathcal{D}_k}
+    \end{equation}
 
 \subsection{Statistica Bayesiana}
-Abbiamo ora visto diversi metodi per determinare i parametri a partire dei dati, ma dobbiamo ancora parlare della loro incertezza. Il \Crefn{teo:bayes} ci aiuta in questo, infatti:
-\begin{equation}
-    p\pare{\vec{\theta}\cond \mathcal{D}} = \frac{p\pare{\vec{\theta}} p\pare{\mathcal{D}\cond\vec{\theta}}}{p\pare{\mathcal{D}}} = \frac{p\pare{\vec{\theta}} p\pare{\mathcal{D}\cond\vec{\theta}}}{\int p\pare{\vec{\theta}'}p\pare{\mathcal{D}\cond\vec{\theta}'}d\vec{\theta}'}
-\end{equation}
+    Abbiamo ora visto diversi metodi per determinare i parametri a partire dei dati, ma dobbiamo
+    ancora parlare della loro incertezza. Il \Crefn{teo:bayes} ci aiuta in questo, infatti:
+    \begin{equation}
+        p\pare{\vec{\theta}\cond \mathcal{D}} = \frac{p\pare{\vec{\theta}} p\pare{\mathcal{D}\cond\vec{\theta}}}{p\pare{\mathcal{D}}} = \frac{p\pare{\vec{\theta}} p\pare{\mathcal{D}\cond\vec{\theta}}}{\int p\pare{\vec{\theta}'}p\pare{\mathcal{D}\cond\vec{\theta}'}d\vec{\theta}'}
+    \end{equation}
+
+    dove \(\mathcal{D} = \{ \left( \vec{x}_n, \vec{y}_n \right) \} \) per supervised learning
+    e \(\mathcal{D} = \{ \left( \vec{y}_n \right) \} \) per unsupervised learning, \(n = 1,\ldots, N \).
+
+    Una voltache il posterior sui paramentri è stato determinato, possiamo calcolare il posterior
+    della distribuzione predittiva marginalizzando su \(\vec{\theta}\):
+    \begin{equation}
+        p \left( \vec{y}\cond\vec{x}, \mathcal{D} \right) = \int p \left( \vec{y}\cond\vec{x}, \theta \right) p \left( \vec{\theta}\cond\mathcal{D} \right) d\theta,
+    \end{equation}
+    questo è noto come BMA (\im{Bayes model averaging}).
+
+    Consideriamo una distribuzione gaussiana di cui sia nota la varianza, nel caso univariato la
+    likelihood per \(\mu\) ha la forma
+    \begin{equation}
+        p \left( \mathcal{D}\cond\mu \right) \propto \exp \left\{ - \frac{1}{2\sigma} \sum_{n=1}^{N_D} \left( y_n - \mu \right)^2 \right\}.
+    \end{equation}
+    Si può mostrate che il prior coniugato è un'altra gaussiana
+    \(\mathcal{N}\left( \mu\cond\check{m}, \check{\tau}^2 \ \right)\) e usando il \Crefn{teo:bayes} troviamo che il
+    posterior è
+    \begin{equation}
+        \begin{split}
+            &p \left( \mu\cond\mathcal{D}, \sigma^2 \right) = \mathcal{N} \left( \mu\cond\hat{m}, \hat{\tau}^2 \right) \\
+            &\text{dove}\;
+                \left\{\begin{array}{ll}
+                    \hat{\tau}^2 &= \frac{1}{\frac{N}{\sigma^2} + \frac{1}{\check{\tau}^2}} = \frac{\sigma^2\check{\tau}^2}{N\check{\tau}^2 + \sigma^2} \\
+                    \hat{m} &= \hat{\tau}^2 \left( \frac{\check{m}}{\check{\tau}^2} + \frac{N\bar{y}}{\sigma^2} \right) = \frac{\sigma^2}{N\check{\tau}^2 + \sigma^2}\check{m} + \frac{N\check{\tau}^2}{N\check{\tau}^2 + \sigma^2}\bar{y}                    
+                \end{array}\right.
+        \end{split}
+    \end{equation}
+    e con \(\bar{y}\equiv\frac{1}{N}\sum_{n=1}^N y_n\) la media empirica.
+    Definendo ora \(\kappa = 1/\sigma^2\) e \(\check{\lambda} = 1/\check{\tau}^2\) posso scrivere:
+    \begin{equation}
+        \begin{split}
+            \hat{\lambda} &= \check{\lambda} + N\kappa \\
+            \hat{m} &= \frac{N\kappa\bar{y} + \check{\lambda}\check{m}}{\hat{\lambda}} = \frac{N\kappa}{N\kappa + \check{\lambda}}\bar{y} + \frac{\check{\lambda}}{N\kappa + \check{\lambda}}\check{m}
+        \end{split}.
+    \end{equation}
+
+    La precisione del posterior \(\hat{\lambda}\) è dunque la precisione del prior \(\check{\lambda}\)
+    più \(N\) unità di misura di precisione \(\kappa\). La media del posterior (\(\hat{m}\)) è invece
+    una combinazione convessa della media empirica $\bar{y}$ e della media del prior \(\check{m}\).
+    Consideriamo ora il posterior dopo aver visto un singolo dato \(y\) (i.e. abbiamo \(N = 1\)),
+    si ha che la \im{posteriori mean} può essere data in tre modi:
+    \begin{equation}
+        \hat{m} = \underbrace{\frac{\check{\lambda}}{\hat{\lambda}}\check{m} + \frac{\kappa}{\hat{\lambda}}\bar{y}}_{\substack{\text{convex combination}\\ \text{of prior and data}}}
+        = \underbrace{\check{m} + \frac{\kappa}{\hat{\lambda} \left( \bar{y} - \check{m} \right)}}_{\substack{\text{prior mean adjusted}\\ \text{to data}}}
+        = \underbrace{\bar{y} = \frac{\check{\lambda}}{\hat{\lambda}}\left( \bar{y} - \check{m} \right)}_{\substack{\text{data adjusted to} \\ \text{the prior mean}}}
+    \end{equation}
+    ed abbiamo lo \im{standard error}:
+    \begin{equation}
+        \operatorname{se} \left( \mu \right) = \sqrt{\mathbb{V}\left[ \mu \left[ \mathcal{D} \right] \right]}.
+    \end{equation}
+
+    Se uso un \textit{uninformative prior} per \(\mu\) ponendo \(\check{\lambda} = 0\), allora \(\hat{m} = \bar{y}\).
+    Supponendo di approssimare \(\sigma^2 \sim s^2 \equiv \frac{1}{N}\sum_{n=1}^N \left( y_n - \bar{y} \right)^2\) segue che
+    \begin{equation}
+        \hat{\lambda} = N\kappa = \frac{N}{s^2} \quad \Longrightarrow \quad \operatorname{se} \left( \mu \right) = \frac{1}{\sqrt{\lambda}} = \frac{s}{\sqrt{N}}.
+    \end{equation}
+    Ovvero abbiamo che l'incertezza decresce ad un rateo di \(1/\sqrt{N}\).
+
+    \begin{observation}
+        Quando non abbiamo informazioni sul prior è desiderabile usare un prior uninformative.
+        Ad esempio un flat prior, i.e. \(p \left( \mu \right) = 1 \).
+    \end{observation}
+
+    \begin{observation}
+        Qualunque modello Bayesiano richiede di specificare un prior \(p \left( \theta \right)\) per i parametri.
+        I parametri del prior sono detti \textbf{iperparametri} e sono denotati con \(\Phi\). Se non
+        sono noti possiamo mettrci sopra un prior (multi-level model \(\Phi\rightarrow\theta\mathcal{D}\)) e
+        definire la joint distribution \(p \left( \vec{\phi}, \vec{\theta}, \mathcal{D} \right) = p \left( \vec{\Phi} \right) p \left( \vec{\theta} \cond \vec{\Phi}\right) p \left( \mathcal{D} \cond \theta \right)\).
+    \end{observation}
+
+    \begin{table}[]
+        \centering\begin{tabular}{ll}
+            \toprule
+            Method & Definition \\
+            \midrule
+            MLE & \( \hat{\vec{\theta}} = \argmax_{\vec{\theta}} p \left( \mathcal{D}\cond \theta \right) \) \\
+            MAP & \( \hat{\vec{\theta}} = \argmax_{\vec{\theta}} p \left( \mathcal{D}\cond \theta \right) p \left( \vec{\theta} \cond \vec{\Phi} \right)\) \\
+            Full Bayes & \( p \left( \vec{\phi}, \vec{\theta}, \mathcal{D} \right) \propto p \left( \vec{\Phi} \right) p \left( \vec{\theta} \cond \vec{\Phi}\right) p \left( \mathcal{D} \cond \theta \right) \) \\
+            \bottomrule
+        \end{tabular}
+        \caption{Metodi visti per ottenere i parametri.}\label{tab:metodi-parametri}
+    \end{table}
+
+\subsection{Intervalli credibili e di confidenza}
+    Una distribuzione posteriore è un oggetto multidimensionale difficile da
+    visualizzare e da trattere. Può essere quindi utile calcolare degli
+    stimatori puntuali, come la media e moda posteriore, per determinare un
+    intervallo di credibilità che quantifichi l'incertezza associata alle stime.
+
+    \begin{definition}[Intervallo di credibilità]
+        L'\im{intervallo di credibilità} \(100\left( 1 - \alpha \right)\%\) è la regione \(C = \left( l, u \right)\)
+        che contiene \( 1 - \alpha \) della probabilità posteriore, ovvero:
+        \begin{equation}
+            C_\alpha \left( \mathcal{D} \right) = \left( l, u \right) \tc P\left( l \leq \theta \leq u \cond \mathcal{D} \right) = 1 - \alpha
+        \end{equation}
+        dove \(l\) si dice \textit{lower} e \(u\) \textit{upper}. Inoltre se il posterior
+        ha una PDF nota, allora \(l = F^{-1} \left( \alpha/2 \right) \) e \( u = F^{-1} \left( 1 - \alpha/2 \right)\),
+        ove \(F\) è la CDF del posterior.
+    \end{definition}
+
+    \begin{definition}[Intervallo di confidenza]
+        Si dice \im{intervallo di confidenza} \(100 \left( 1 - \alpha \right)\% \), per la stima di un
+        parametro \(\theta\), la regione \(I ( \tilde{\mathcal{D}} ) = ( l( \mathcal{\tilde{D}} ), u( \mathcal{\tilde{D}} ) )\)
+        ottenuto da un data set \(\mathcal{D}\) talse che
+        \begin{equation}
+            \pr \left( \theta \in I \left( \mathcal{\tilde{D}} \cond \mathcal{D} \sim \theta \right) \right) = 1 - \alpha.
+        \end{equation}
+
+    \end{definition}
+
+    \begin{observation}
+        L'intervallo di credibilità è un concetto Bayesiano mentre l'intervallo di
+        confidenza è un concetto frequentista. CL (frequentista): \(\theta\) è una costante fissa
+        non nota e i dati sono aleatori. CI (Bayesiano): i dati sono fissi perchè noti,
+        \(\theta\) è invece ignota. Un CL al \(95\%\) \underline{non} significa che il
+        parametro stia verosimilmente dentro l'intervallo il \(95\%\) delle volta dati
+        i dati osservati.
+    \end{observation}
+
+    \begin{example}
+        
+    \end{example}
+
 \end{document}
