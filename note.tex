@@ -8,7 +8,10 @@
 \usepackage[italian]{babel}
 
 \usepackage{booktabs}
+
+\usepackage{thmtools}
 \usepackage[italian]{cleveref}
+\usepackage{nameref}
 
 \usepackage{siunitx}
 
@@ -44,7 +47,7 @@
 
 
 %%% OPERATORS
-\DeclareMathOperator{\pr}{Pr}
+    \DeclareMathOperator{\pr}{Pr}
 \DeclareMathOperator{\erf}{erf}
 \DeclareMathOperator{\Beta}{Beta}
 \DeclareMathOperator{\Ga}{Ga}
@@ -90,6 +93,8 @@
 \newcommand{\tcq}{\ensuremath{\quad\text{t.c.}\quad}}
 %% TEXT IN MATH
 \newcommand{\MLE}{\ensuremath{\text{MLE}}}
+%% NAMED CREF
+\newcommand{\Crefn}[1]{\Cref{#1} (\nameref{#1})}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newtheorem{theorem}{Teorema}[section]
@@ -150,7 +155,7 @@ Problemi comuni in machine learning sono quelli di \textbf{classificazione}. In 
 \begin{example}[Classificazione specie di iris]\label{ex:iris}
 In generale in \im{image classification} gli input $X$ sono immagini, quindi:
 \begin{equation}
-X = R^D,\quad D = C\times D_1\times D_2,
+X = R^D,\quad D = C \times D_1 \times D_2,
 \end{equation}
 ove $C = 3$ sono i canali RGB. E cerchiamo una mappa
 \begin{equation}
@@ -198,7 +203,7 @@ ove $\vec{\theta}$ è detto \im{threshold parameter}. Questo decision tree è vi
 \mathcal{L}(\theta) \equiv \frac{1}{N}\sum_{n=1}^N \mathbb{I}\left( y_n \neq f(\vec{x_n}, \vec{\theta}) \right),
 \end{equation}
 dove $\mathbb{I}(e)$ è l'\textbf{indicatore binario}
-\begin{equation}
+\begin{equation}\label{eq:indicatore-binario}
 \mathbb{I}(e) = \left\{\begin{array}{l@{\text{ se } e \text{ è }}l}
 1 & \text{vero} \\
 0 & \text{falso} \\
@@ -355,7 +360,7 @@ Questi stimatori non danno tutta l'informazione contenuta nella distribuzione.
 
 \subsection{Teorema di Bayes}
 
-\begin{theorem}
+\begin{theorem}[Teorema di Bayes]\label{teo:bayes}
 Data una quantità non nota $H$ (hypotesis) e dei dati noti $Y=y$ abbiamo che
 \begin{equation}
 p\pare{H=h\cond Y=y} = \frac{p\pare{H=h}p\pare{Y=y\cond H=h}}{p\pare{Y=y}}.
@@ -652,7 +657,106 @@ l_{01}\pare{\vec{y}_n, \vec{\theta}; \vec{x}_n} = \left\{\begin{array}{l@{\quad\
 0 & \vec{y}_n \neq f\pare{\vec{x}_n; \vec{\theta}} 
 \end{array}\right.
 \end{equation}
-dove $f\pare{\vec{x}, \vec{\theta}}$ è un predittore.
+dove $f\pare{\vec{x}, \vec{\theta}}$ è un predittore. L'empirical risk diviene
+\begin{equation}
+\mathcal{L}\pare{\vec{\theta}} = \frac{1}{N}\sum_{n=1}^N l_{01}\pare{\vec{y}_n, \vec{\theta}; \vec{x}_n},
+\end{equation}
+che è il misclassification rate nel training set. In problemi binari possiamo riscrivere il misclassification rate usando l'indicatore binario come definito in \eqref{eq:indicatore-binario}. Se $\tilde{y} \in \left\{ -1, +1 \right\}$ è il time label e $\hat{y}\in \left\{-1, +1\right\} = f\pare{\vec{x}, \vec{\theta}}$ la prediction, allora:
+\begin{equation}
+l_{01}\pare{\tilde{y}, \hat{y}} = \mathbb{I}\pare{\tilde{y}\neq\hat{y}} = \mathbb{I}\pare{\tilde{y}\hat{y}<0},
+\end{equation}
+con cui il rischio empirico si scrive
+\begin{equation}
+\mathcal{L}\pare{\vec{\theta}} = \frac{1}{N}\sum_{n=1}^{N}l_{01}\pare{\tilde{y}_n, \hat{y}_n} = \frac{1}{N}\sum_{n=1}^N\mathbb{I}\pare{\tilde{y}_n\hat{y}_n < 0}.
+\end{equation}
+La funzione $l_{01}$ è però problematica in quanto non-smooth e quindi difficile da ottimizzare. In questi casi si può utilizzare una funzione surrogata, definita generalmente come limite superiore convesso, ad esempio
+\begin{equation}
+l_{ll}\pare{\tilde{y}, \eta} = -\log{p\pare{\tilde{y}\cond\eta}} = \log\pare{1 + e^{-\tilde{y}\eta}},\qquad p\pare{\tilde{y}\cond\vec{x},\vec{\theta}} = \sigma\pare{\hat{y}\eta} = \frac{1}{1+e^{-\hat{y}\eta}}
+\end{equation}
 \end{example}
 
+\subsection{Altri metodi di minimizzazione}
+
+\subsubsection{Metodo dei momenti}
+Il calcolo di $\nabla_{\vec{\theta}}\NLL\pare{\vec{\theta}} = 0$, ovvero la ricerca dei punti estremi, può essere difficile. Il metodo dei momenti consiste nell'eguagliare i momenti teorici della distribuzione ai momenti empirici, ovvero:
+\begin{equation}
+\left.
+\begin{array}{ll}
+\textsc{Momenti teorici:} & \mu_k = \mathbb{E}\spare{Y^k} \\
+\\
+\textsc{Momenti empirici:} & \hat{\mu}_k = \frac{1}{N}\sum_{n=1}^N y_n^k
+\end{array}
+\right\} \mu_k = \hat{\mu}_k \quad\Longrightarrow\quad \text{ho } k \text{ equazioni}.
+\end{equation}
+Ad esempio per la gaussiana abbiamo:
+\begin{align*}
+&\mu_1 = \mu = \bar{y}, \\
+&\mu_2 = \sigma^2 + \mu^2 = s^2.
+\end{align*}
+In questo caso abbiamo che MOM $=$ MLE, ma questo non è vero in generale (ad esempio non è vero per la distribuzione uniforme).
+
+\subsubsection{Online recursive estimation}
+Se tutto il dataset $\mathcal{D}$ è noto e disponibile prima che inizi il processo di learning si dice che si fa \im{batch learning}. In alcuni casi però il dataset è disponibile in blocchi e si dice che si fa \im{online learning}. Si ha che $\hat{\vec{\theta}}_{t-1}$ è la predizione dato il blocco $\mathcal{D}_{1:t-1}$, quello che vogliamo fare è trovare $\vec{\theta}_t = f(\hat{\vec{\theta}}_{t-1}, \vec{y}_t)$ con un update ricorsivo.
+
+\begin{definition}[Moving average]
+Per una gaussiana multivariata si può definire la \im{media mobile} come:
+\begin{equation}
+\begin{split}
+\hat{\vec{\mu}}_t &= \frac{1}{t}\sum_{n=1}^t\vec{y}_n \\
+&= \frac{1}{t}\spare{\pare{t-1}\hat{\vec{\mu}}_{t-1} + \vec{y}_t} = \hat{\vec{\mu}}_{t-1} + \frac{1}{t}\pare{\vec{y}_t - \hat{\vec{\mu}}_{t-1}}.
+\end{split}
+\end{equation}
+Nel caso in cui la distribuzione cambi in modo continuo la moving average può anche essere pesata.
+\end{definition}
+
+\subsection{Regolarizzazione}
+Un problema della MLE (maximum likelihood estimation) e della ERM (empirical risk minimization) è che i parametri tendono ad essere determinati minimizzando il loss nel training set, ma non necessariamente lo minimizzano per i dati futuri. Per ridurre l'entità del problema si può procedere con la regolarizzazione:
+\begin{equation}
+\mathcal{L}\pare{\vec{\theta}, \lambda} = \Bigl[ \underbrace{\frac{1}{N}\sum_{n=1}^N l\pare{\vec{y}_n, \vec{\theta}; \vec{x}_n}}_{\mathcal{L}\pare{\vec{\theta}}} + \lambda C\pare{\vec{\theta}} \Bigr],
+\end{equation}
+dove $\lambda$ è detto \im{regularization parameter} e $C\pare{\vec{\theta}}$ è la \im{penality function}, ad esempio si può avere:
+\[
+C\pare{\vec{\theta}} = -\log{p\pare{\vec{\theta}}}.
+\]
+
+Per $\lambda = 1$ e riscalando $p\pare{\vec{\theta}}$ si ha la NLL:
+\begin{equation}
+\NLL\pare{\vec{\theta}, \lambda} = - \spare{\sum_{n=1}^N\log{p\pare{\vec{y}_n\cond\vec{x}_n,\vec{\theta}}} + \log{p\pare{\vec{\theta}}}} = -\spare{\log{p\pare{\mathcal{D}\cond\vec{\theta}}} + \log{p\pare{\vec{\theta}}}},
+\end{equation}
+che implica:
+\begin{equation}
+\hat{\vec{\theta}} = \argmax_{\vec{\theta}}\log{p\pare{\vec{\theta}\cond\mathcal{D}}} = \argmax_{\vec{\theta}}\spare{\log{p\pare{\mathcal{D}\cond\vec{\theta}}} + \log{p\pare{\vec{\theta}}} - \text{const}}.
+\end{equation}
+Questa stima si chiama MAP (\im{maximum a posterior}) estimation.
+
+
+\subsubsection{Come scegliere $\lambda$}
+Un valore (troppo) piccolo per $\lambda$ equivale a minimizzare il rischio empirico (\im{overfitting}); un valore (troppo) grande equivale a essere troppo vicini al prior (\im{underfitting}). Una soluzione è dividere il training set in due classi: una di training ($\mathcal{D}_{\text{train}},\,80\%$) ed una di validation ($\mathcal{D}_{\text{val}},\,20\%$). Si va quindi a fittare il modello su $\mathcal{D}_{\text{train}}$ per ogni setting $\lambda$ e poi a valutare la performance del modello ottenuto su $\mathcal{D}_{\text{val}}$. Si prende dunque il valore di $\lambda$ per cui si è ottenuta la performance migliore.
+
+\begin{definition}[Regularized empirical risk]
+Definiamo l'\im{empirical risk regolarizzato} come:
+\begin{equation}
+R_\lambda\pare{\vec{\theta}, \mathcal{D}} \equiv \frac{1}{\left|\mathcal{D}\right|}\sum_{\pare{\vec{x}, \vec{y}}\in\mathcal{D}} l\pare{\vec{y}, f\pare{\vec{x}, \vec{\theta}}} + \lambda C\pare{\theta}
+\end{equation}
+\end{definition}
+\noindent
+Il processo che seguiamo è quindi il seguente:
+\begin{enumerate}
+\item costruiamo il modello: $\hat{\vec{\theta}}_\lambda\pare{\mathcal{D}_\text{train}} = \argmin_{\vec{\theta}} R_\lambda\pare{\vec{\theta}, \mathcal{D}_{\text{train}}}\;\forall\lambda$;
+\item calcoliamo il validation risk: $R_\lambda^\text{val} = R_0\pare{\hat{\vec{\theta}}_\lambda\pare{\mathcal{D}_\text{train}}, \mathcal{D}_\text{val}}$;
+\item prendiamo il $\lambda$ che ha dato la miglior performance: $\lambda^\star = \argmin_{\lambda\in S} R_\lambda^\text{val}$;
+\item si ri-fitta il modello su $\mathcal{D} = \mathcal{D}_\text{train}\cup\mathcal{D}_\text{val}$ usando $\lambda=\lambda^\star$;
+\item si ottengono i parametri $\hat{\vec{\theta}}^\star = \argmin_{\vec{\theta}} R_{\lambda^\star}\pare{\vec{\theta}, \mathcal{D}}$.
+\end{enumerate}
+
+Se il dataset è piccolo, eliminare il $20\%$ dei dati può essere dannoso e si procede quindi con la \im{cross validation}. Questa consiste nel dividere il dataset in $K$ \im{fold} e per ognuno allenare il modello su tutti i fold meno il $k$-esimo, il quale viene usato come test fold. Si definisce l'empirical risk regolarizzato per cross validation:
+\begin{equation}
+R_\lambda^\text{CV} \equiv \frac{1}{K}\sum_{k=1}^K R_0\pare{\hat{\vec{\theta}}_\lambda\pare{\mathcal{D} - \mathcal{D}_k}, \mathcal{D}_k}
+\end{equation}
+
+\subsection{Statistica Bayesiana}
+Abbiamo ora visto diversi metodi per determinare i parametri a partire dei dati, ma dobbiamo ancora parlare della loro incertezza. Il \Crefn{teo:bayes} ci aiuta in questo, infatti:
+\begin{equation}
+    p\pare{\vec{\theta}\cond \mathcal{D}} = \frac{p\pare{\vec{\theta}} p\pare{\mathcal{D}\cond\vec{\theta}}}{p\pare{\mathcal{D}}} = \frac{p\pare{\vec{\theta}} p\pare{\mathcal{D}\cond\vec{\theta}}}{\int p\pare{\vec{\theta}'}p\pare{\mathcal{D}\cond\vec{\theta}'}d\vec{\theta}'}
+\end{equation}
 \end{document}
