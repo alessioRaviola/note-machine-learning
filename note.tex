@@ -1,6 +1,8 @@
 \documentclass[10pt]{article}
 \usepackage{amsmath,amsthm}
 \usepackage{amssymb}
+\usepackage{bm}
+
 \usepackage{anysize}
 \usepackage{listings}
 \usepackage{graphicx}
@@ -58,10 +60,11 @@
 \DeclareMathOperator*{\argmax}{argmax}
 \DeclareMathOperator*{\argmin}{argmin}
 \DeclareMathOperator{\NLL}{NLL}
+\DeclareMathOperator{\bias}{bias}
 %%%
 
 %% MATH MISC
-\renewcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\ve}[1]{\bm{#1}}
 \newcommand{\tens}[1]{\mathsf{#1}}
 \newcommand{\pd}[2]{\frac{\partial #1}{\partial #2} }
 \newcommand{\HALF}{\frac{1}{2}}
@@ -129,9 +132,15 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{quotation}
-A computer program is said to learn from experience E with respecto to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E.
+A computer program is said to learn from experience E with respecto to some
+class of tasks T and performance measure P, if its performance at tasks in T, as
+measured by P, improves with experience E.
 \end{quotation}
-L'impostazione del corso è di tipo \textit{probabilistico} (statistical learning). Le quantità non note sono trattate come \textbf{variabili aleatorie} (\im{random variables}) a cui viene associata una \textbf{distribuzione di probabilità} (\im{probability distribution}) che descrive il set (pesato) di valori che la variabile può assumere.
+L'impostazione del corso è di tipo \textit{probabilistico} (statistical
+learning). Le quantità non note sono trattate come \textbf{variabili aleatorie}
+(\im{random variables}) a cui viene associata una \textbf{distribuzione di
+probabilità} (\im{probability distribution}) che descrive il set (pesato) di
+valori che la variabile può assumere.
 
 Abbiamo tre tipi di machine learning:
 \begin{itemize}
@@ -142,29 +151,45 @@ Abbiamo tre tipi di machine learning:
 il corso si focalizza sui primi due tipi.
 
 \subsection{Supervised learning}
-Il \textbf{compito} T consiste nell'imparare una mappa $f$ dagli input $x\in X$ agli output $y\in Y$. Gli \textbf{input} $x$ sono chiamati \im{features} (o \im{covariates} o \im{predictors}) e sono in genere costituiti da un vettore reale con dimensione fissata, ovvero abbiamo $X\equiv \mathbb{R}^D$. Gli \textbf{output} sono chiamati \im{label} (o \im{target} o \im{response}).
+Il \textbf{compito} T consiste nell'imparare una mappa $f$ dagli input $x\in X$
+agli output $y\in Y$. Gli \textbf{input} $x$ sono chiamati \im{features} (o
+\im{covariates} o \im{predictors}) e sono in genere costituiti da un vettore
+reale con dimensione fissata, ovvero abbiamo $X\equiv \mathbb{R}^D$. Gli
+\textbf{output} sono chiamati \im{label} (o \im{target} o \im{response}).
 
-L'\textbf{esperienza} E consiste in un \im{training set} $\mathcal{D}$ di $N$ coppie input-output:
+L'\textbf{esperienza} E consiste in un \im{training set} $\mathcal{D}$ di $N$
+coppie input-output:
 \begin{equation}
 \mathcal{D} = \left\{ (x_n, y_n) \right\}_{n=1}^N,
 \end{equation}
-dove $N$ è detta \im{sample size}.
+dove \( N \) è detta \im{sample size}.
 
 La \textbf{performance} dipenda dal compito T.
 
 \subsubsection{Classificazione}
-Problemi comuni in machine learning sono quelli di \textbf{classificazione}. In un problema di questo tipo lo spazio degli output C è un set \textit{non ordinato} di label $y = \{ 1, 2, \cdots, C \}$ dette \im{classes}. Quello che chiede il problema è di predire una classe dato un input, problemi di questo tipo sono detti di \im{pattern recognition}\footnote{Se abbiamo solo due classi, i.e. solo due output, allora il problema si dice di \im{classificazione binaria}}.
+Problemi comuni in machine learning sono quelli di \textbf{classificazione}. In
+un problema di questo tipo lo spazio degli output C è un set \textit{non
+ordinato} di label \( y = \{ 1, 2, \ldots, C \} \) dette \im{classes}. Quello che
+chiede il problema è di predire una classe dato un input, problemi di questo
+tipo sono detti di \im{pattern recognition}\footnote{Se abbiamo solo due classi,
+i.e. solo due output, allora il problema si dice di \im{classificazione
+binaria}}.
 
 \begin{example}[Classificazione specie di iris]\label{ex:iris}
-In generale in \im{image classification} gli input $X$ sono immagini, quindi:
+In generale in \im{image classification} gli input \( X \) sono immagini, quindi:
 \begin{equation}
 X = R^D,\quad D = C \times D_1 \times D_2,
 \end{equation}
-ove $C = 3$ sono i canali RGB. E cerchiamo una mappa
+ove \( C = 3 \) sono i canali RGB. E cerchiamo una mappa
 \begin{equation}
 f: X \longrightarrow Y
 \end{equation}
-che ci dica a quale delle classi appartenenti a $Y$ l'immagine appartiene. Per le specie di iris però i botanisti hanno individuato 4 caratteristiche numeriche: lunghezza e larghezza del sepalo e del petalo; dunque abbiamo $X = \mathbb{R}^4$. Supponiamo che il traning set sia una collezione di 150 esempi delle 3 specie, 50 per ognuna. I dati possono essere raccolti in una matrice detta \im{design matrix} come \im{tabular data} - come in \Cref{tab:iris}.
+che ci dica a quale delle classi appartenenti a \( Y \) l'immagine appartiene. Per
+le specie di iris però i botanisti hanno individuato 4 caratteristiche
+numeriche: lunghezza e larghezza del sepalo e del petalo; dunque abbiamo \( X =
+\mathbb{R}^4 \). Supponiamo che il traning set sia una collezione di 150 esempi
+delle 3 specie, 50 per ognuna. I dati possono essere raccolti in una matrice
+detta \im{design matrix} come \im{tabular data} - come in \Cref{tab:iris}.
 
 \begin{table}
 \centering
@@ -183,15 +208,19 @@ Index & sl [cm] & sw [cm] & pl [cm] & pw [cm] & Label \\
 \caption{Design matrix del training set per classificazione specie di iris.}\label{tab:iris}
 \end{table}
 
-Se abbiamo $N$ elementi nel training set, ognuno con dimensione $D = \dim{X} + \dim{Y}$, allora abbiamo:
+Se abbiamo \( N \) elementi nel training set, ognuno con dimensione \( D = \dim{X} +
+\dim{Y} \), allora abbiamo:
 \begin{itemize}
-\item \im{big data} se $N\gg D$, ovvero se il numero di elementi è molto superiore alla loro dimensione;
-\item \im{wide data} se $D\gg N$, ovvero se la dimensione degli elementi è molto superiore al loro numero.
+\item \im{big data} se \( N\gg D \), ovvero se il numero di elementi è molto superiore alla loro dimensione;
+\item \im{wide data} se \( D\gg N \), ovvero se la dimensione degli elementi è molto superiore al loro numero.
 \end{itemize}
 
-Una buona idea è fare una \textit{esplorazione dei dati} (\im{exploatory data analysis}) per vedere se ci sono dei pattern ovvi, ad esempio tramite grafici. Per grandi basi dati (big data) possiamo procedere mediante \im{dimensionality reduction}:
+Una buona idea è fare una \textit{esplorazione dei dati} (\im{exploatory data
+analysis}) per vedere se ci sono dei pattern ovvi, ad esempio tramite grafici.
+Per grandi basi dati (big data) possiamo procedere mediante \im{dimensionality
+reduction}:
 \begin{equation}
-f(\vec{x}, \vec{\theta}) = \left.\begin{array}{l}
+f(\ve{x}, \ve{\theta}) = \left.\begin{array}{l}
 \left\{\begin{array}{ll}
 p_l < \qty{2.45}{cm} & \text{Setosa} \\
 \text{Altrimenti} & \left\{\begin{array}{ll}
@@ -201,9 +230,11 @@ p_w < \qty{1.75}{cm} & \text{Versicolor} \\
 \end{array}\right.
 \end{array}\right\} \quad\text{\im{decision tree}},
 \end{equation}
-ove $\vec{\theta}$ è detto \im{threshold parameter}. Questo decision tree è visualizzato in \Cref{fig:iris-decision-tree}. La performance può essere quindi misurata con il \im{miscalssification rate}:
+ove $\ve{\theta}$ è detto \im{threshold parameter}. Questo decision tree è
+visualizzato in \Cref{fig:iris-decision-tree}. La performance può essere quindi
+misurata con il \im{miscalssification rate}:
 \begin{equation}\label{eq:misclassification-rate-simple}
-\mathcal{L}(\theta) \equiv \frac{1}{N}\sum_{n=1}^N \mathbb{I}\left( y_n \neq f(\vec{x_n}, \vec{\theta}) \right),
+\mathcal{L}(\theta) \equiv \frac{1}{N}\sum_{n=1}^N \mathbb{I}\left( y_n \neq f(\ve{x_n}, \ve{\theta}) \right),
 \end{equation}
 dove $\mathbb{I}(e)$ è l'\textbf{indicatore binario}
 \begin{equation}\label{eq:indicatore-binario}
@@ -212,11 +243,14 @@ dove $\mathbb{I}(e)$ è l'\textbf{indicatore binario}
 0 & \text{falso} \\
 \end{array}\right..
 \end{equation}
-Nel caso in cui alcuni errori di classificazione siano più dannosi di altri posso definire una loss function $l(y, \hat{y})$ e ridefinire il misclassification rate come l'\im{empirical risk}:
+Nel caso in cui alcuni errori di classificazione siano più dannosi di altri
+posso definire una loss function $l(y, \hat{y})$ e ridefinire il
+misclassification rate come l'\im{empirical risk}:
 \begin{equation}\label{eq:misclassification-rate}
-\mathcal{L}(\theta) \equiv \frac{1}{N}\sum_{n=1}^N l\left( y_n, f(\vec{x_n}, \vec{\theta}) \right).
+\mathcal{L}(\theta) \equiv \frac{1}{N}\sum_{n=1}^N l\left( y_n, f(\ve{x_n}, \ve{\theta}) \right).
 \end{equation}
-Un modo che abbiamo per definire il \im{training} (o \im{model fitting}) è modificare questo rischio empirico, ovvero trovare $\hat{\theta}$ tale che
+Un modo che abbiamo per definire il \im{training} (o \im{model fitting}) è
+modificare questo rischio empirico, ovvero trovare $\hat{\theta}$ tale che
 \begin{equation}
 \mathcal{L}(\hat{\theta}) = \min[\mathcal{L}(\theta)].
 \end{equation}
@@ -274,7 +308,10 @@ Se i due eventi sono indipendenti questa si riduce a $\pr\pare{A\cond B} = \pr\p
 \end{property}
 
 \subsection{Random variables}
-Rappresentiamo con $X$ una variabile di cui non conosciamo il valore e la chiamiamo \textit{variabile casuale} (\im{random variable}). Il set dei valori che $X$ può assumere è detto \textit{spazio di sampling} (\im{sampling space}). Un evento è dunque un set di risultati dato un sampling space definito.
+Rappresentiamo con $X$ una variabile di cui non conosciamo il valore e la
+chiamiamo \textit{variabile casuale} (\im{random variable}). Il set dei valori
+che $X$ può assumere è detto \textit{spazio di sampling} (\im{sampling space}).
+Un evento è dunque un set di risultati dato un sampling space definito.
 
 Se la variabile è \textbf{discreta} abbiamo un sampling space numerabile e la PMF (\im{probability mass function}):
 \begin{equation}
@@ -293,9 +330,12 @@ da cui segue:
 &\pr\pare{a \leq X \leq b} = \int_a^b p\pare{x} = P\pare{b} - P\pare{a} \\
 &\Longrightarrow \pr\pare{x \leq X \leq x + dx} \approx p\pare{x}.
 \end{align}
-Se la CDF $P\pare{x}$ è monotona crescente allora la sua inversa $P^{-1}(q)$ è detta \textit{quantile}. Il valore $x_q = P^{-1}\pare{q}$ è il valore per cui $\pr\pare{X\leq x_q} < q$, ovvero il quantile $q$ della distribuzione $P$.
+Se la CDF $P\pare{x}$ è monotona crescente allora la sua inversa $P^{-1}(q)$ è
+detta \textit{quantile}. Il valore $x_q = P^{-1}\pare{q}$ è il valore per cui
+$\pr\pare{X\leq x_q} < q$, ovvero il quantile $q$ della distribuzione $P$.
 
-Se abbiamo due variabili casuali $X$ e $Y$ allora possiamo definire la \im{joint distribution}:
+Se abbiamo due variabili casuali $X$ e $Y$ allora possiamo definire la \im{joint
+distribution}:
 \begin{equation}
 p\pare{x, y} = p\pare{X = x, Y = y} \equiv p\pare{X = x\et Y = y}.
 \end{equation}
@@ -312,7 +352,7 @@ altrimenti se sono dipendenti la \textit{distribuzione condizionale} (\im{condit
 \end{equation}
 da cui segue la \textbf{chain rule}:
 \begin{equation}
-p\pare{\vec{x}_{1,D}} = p\pare{x_1} p\pare{x_2\cond x_1} p\pare{x_3\cond x_1, x_2}\cdots p\pare{x_D\cond p_{1: D-1}}.
+p\pare{\ve{x}_{1,D}} = p\pare{x_1} p\pare{x_2\cond x_1} p\pare{x_3\cond x_1, x_2}\cdots p\pare{x_D\cond p_{1: D-1}}.
 \end{equation}
 
 Due variabili si dicono \im{marginalmente indipendenti} se
@@ -380,11 +420,15 @@ p\pare{Y=y} = \sum_{h'\in H}p\pare{Y=y \cond H=h'} = \sum_{h'\in H}p\pare{H=h', 
 \end{itemize}
 
 \begin{example}[Monty Hall problem]
-Posso scegliere una di tre porte. Dietro una delle porte c'è un premio. Inizio con il scegliere la porta 1. Ho che la probabilità degli eventi $H_{1,2,3}$ che il premio sia dietro la porta 1, 2 o 3 è
+Posso scegliere una di tre porte. Dietro una delle porte c'è un premio. Inizio
+con il scegliere la porta 1. Ho che la probabilità degli eventi $H_{1,2,3}$ che
+il premio sia dietro la porta 1, 2 o 3 è
 \[
 p\pare{H_1} = p\pare{H=1} = \frac{1}{3}.
 \]
-Ora una delle porte non scelte da me si apre rivelando che dietro quella non c'è il premio, in base a dove si trova il premio la probabilità degli eventi $Y_{2, 3}$ che si apra una porta o l'altra è data da $p\pare{Y=y, H=h}$:
+Ora una delle porte non scelte da me si apre rivelando che dietro quella non c'è
+il premio, in base a dove si trova il premio la probabilità degli eventi $Y_{2,
+3}$ che si apra una porta o l'altra è data da $p\pare{Y=y, H=h}$:
 \[
 \begin{array}{l@{,\qquad}l@{,\qquad}l}
 p\pare{Y=2, H_1} = \frac{1}{2} & p\pare{Y=2, H_2} = 0 & p\pare{Y=2, H_3} = 1, \\
@@ -392,7 +436,10 @@ p\pare{Y=2, H_1} = \frac{1}{2} & p\pare{Y=2, H_2} = 0 & p\pare{Y=2, H_3} = 1, \\
 p\pare{Y=3, H_1} = \frac{1}{2} & p\pare{Y=3, H_2} = 1 & p\pare{Y=3, H_3} = 1. \\
 \end{array}
 \]
-Si apre la porta 3. Mi viene data la scelta di cambiare porta prima che venga rivelato dove si trova il premio, per massimizzare la probabilità di vittoria posso calcolare le probabilità condizionate con Bayes. Dai calcoli di prima ho che $p\pare(Y=3) = 1/6 + 1/3 = 1/3$ dunque:
+Si apre la porta 3. Mi viene data la scelta di cambiare porta prima che venga
+rivelato dove si trova il premio, per massimizzare la probabilità di vittoria
+posso calcolare le probabilità condizionate con Bayes. Dai calcoli di prima ho
+che $p\pare(Y=3) = 1/6 + 1/3 = 1/3$ dunque:
 \begin{equation}
 \begin{split}
 p\pare{H_1\cond Y=3} &= \dfrac{\frac{1}{3}\cdot\frac{1}{2}}{\frac{1}{2}} = \frac{1}{3}, \\
@@ -486,7 +533,11 @@ p\pare{y} = \mathcal{N}\pare{x_1\cond\mu_1, \sigma^2_1} \otimes \mathcal{N}\pare
 \end{equation}
 ovvero \textit{la convoluzione di due gaussiane è una gaussiana}.
 
-Supponiamo ora che $x$ sia una variabile casuale e $y = f\pare{x}$ una funzione di essa. Talora è difficile calcolare $p\pare{y}$ analiticamente. Supponiamo ad esempio che $x\sim\Unif\pare{-1,+1}$ e $y=x^2$, possiamo approssimare $p\pare{y}$ con un generatore (uniforme) di numeri casuali e facendone il quadrato per poi prendere la \im{distribuzione empirica}
+Supponiamo ora che $x$ sia una variabile casuale e $y = f\pare{x}$ una funzione
+di essa. Talora è difficile calcolare $p\pare{y}$ analiticamente. Supponiamo ad
+esempio che $x\sim\Unif\pare{-1,+1}$ e $y=x^2$, possiamo approssimare
+$p\pare{y}$ con un generatore (uniforme) di numeri casuali e facendone il
+quadrato per poi prendere la \im{distribuzione empirica}
 \begin{equation}
 p_S\pare{y} = \frac{1}{N_S}\sum_{x=1}^{N_S}\delta\pare{y-y_s}.
 \end{equation}
@@ -498,7 +549,7 @@ Siano $X$ e $Y$ due variabili. La \im{covarianza} è
 \begin{equation}
 \Cov\spare{X, Y} \equiv \mathbb{E}\spare{\pare{X - \mathbb{E}\pare{E}}\pare{Y - \mathbb{E}\pare{E}}} = \mathbb{E}\spare{XY} - \mathbb{E}\spare{X}\mathbb{E}\spare{Y},
 \end{equation}
-ovvero una matrice $D$-dimensionale, con $D = \dim\pare{\vec{x}}$, che contiene le varianze sulla diagonale.
+ovvero una matrice $D$-dimensionale, con $D = \dim\pare{\ve{x}}$, che contiene le varianze sulla diagonale.
 \end{definition}
 
 \begin{definition}(Correlazione di Pearson)
@@ -537,13 +588,13 @@ e
 \subsection{Distribuzione gaussiana multivariata}
 La definizione che abbiamo dato di distribuzione gaussiana si estende a più variabili. Innanzitutto definiamo la PDF
 \begin{equation}
-\mathcal{N}\pare{\vec{y}\cond\vec{\mu}, \Sigma} \equiv \frac{1}{\pare{2\pi}^{D/2}\left|\Sigma\right|^{1/2}}\exp\left\{-\frac{1}{2}\pare{\vec{y}-\vec{\mu}}^T\Sigma^{-1}\pare{\vec{y}-\vec{\mu}}\right\},
+\mathcal{N}\pare{\ve{y}\cond\ve{\mu}, \Sigma} \equiv \frac{1}{\pare{2\pi}^{D/2}\left|\Sigma\right|^{1/2}}\exp\left\{-\frac{1}{2}\pare{\ve{y}-\ve{\mu}}^T\Sigma^{-1}\pare{\ve{y}-\ve{\mu}}\right\},
 \end{equation}
-dove $\Sigma = \Cov\spare{\vec{y}}$.
+dove $\Sigma = \Cov\spare{\ve{y}}$.
 
-Supponiamo di avere due variabili aleatorie $\vec{y}_1$ e $\vec{y}_2$. Si può definire la distribuzione \im{jointly gaussian}. Con
+Supponiamo di avere due variabili aleatorie $\ve{y}_1$ e $\ve{y}_2$. Si può definire la distribuzione \im{jointly gaussian}. Con
 \[
-\vec{\mu} = \pare{\begin{array}{c}
+\ve{\mu} = \pare{\begin{array}{c}
 \mu_1 \\
 \mu_2
 \end{array}},\qquad
@@ -555,37 +606,43 @@ Supponiamo di avere due variabili aleatorie $\vec{y}_1$ e $\vec{y}_2$. Si può d
 \]
 le distribuzioni marginali sono
 \begin{equation}
-p\pare{\vec{y}_1} = \mathcal{N}\pare{\vec{y}_1\cond\vec{\mu}_1, \Sigma_{11}},\qquad p\pare{\vec{y}_2} = \mathcal{N}\pare{\vec{y}_2\cond\vec{\mu}_2, \Sigma_{22}}
+p\pare{\ve{y}_1} = \mathcal{N}\pare{\ve{y}_1\cond\ve{\mu}_1, \Sigma_{11}},\qquad p\pare{\ve{y}_2} = \mathcal{N}\pare{\ve{y}_2\cond\ve{\mu}_2, \Sigma_{22}}
 \end{equation}
 e la probabilità condizionata
 \begin{equation}
-p\pare{\vec{y}_1\cond\vec{y}_2} = \mathcal{N}\pare{\vec{y}_1\cond\vec{\mu}_{1\cond 2}, \Sigma_{1\cond 2}},
+p\pare{\ve{y}_1\cond\ve{y}_2} = \mathcal{N}\pare{\ve{y}_1\cond\ve{\mu}_{1\cond 2}, \Sigma_{1\cond 2}},
 \end{equation}
 con
 \[
-\vec{\mu}_{1\cond 2} = \vec{\mu}_1 + \Sigma_{12}\Sigma_{22}^{-1}\pare{\vec{y}_2 - \vec{\mu_2}},\qquad \Sigma_{1\cond 2} = \Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}=\Lambda_{11}^{-1},
+\ve{\mu}_{1\cond 2} = \ve{\mu}_1 + \Sigma_{12}\Sigma_{22}^{-1}\pare{\ve{y}_2 - \ve{\mu_2}},\qquad \Sigma_{1\cond 2} = \Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}=\Lambda_{11}^{-1},
 \]
 queste sono tutte gaussiane.
 
 \section{Richiami di statistica}
-Nella sezione precedente abbiamo assunto come noti i parametri $\vec{\theta}$, in questa sezione impariamo come è possibile imparare questi parametri a partire dai dati (training set) $\mathcal{D}$. Come abbiamo visto nell'\Cref{ex:iris}, il problema si riduce a trovare $\hat{\theta}$ tale che minimizzi il misclassification rate, \Cref{eq:misclassification-rate}, ovvero:
+Nella sezione precedente abbiamo assunto come noti i parametri $\ve{\theta}$,
+in questa sezione impariamo come è possibile imparare questi parametri a partire
+dai dati (training set) $\mathcal{D}$. Come abbiamo visto nell'\Cref{ex:iris},
+il problema si riduce a trovare $\hat{\theta}$ tale che minimizzi il
+misclassification rate, \Cref{eq:misclassification-rate}, ovvero:
 \[
-\hat{\theta} \quad\text{t.c.}\quad \mathcal{L}(\hat{\theta}) = \min\spare{\mathcal{L}\pare{\theta}} \equiv \min\spare{\frac{1}{N}\sum_{n=1}^N l\pare{y_n, f\pare{\vec{x_n}, \vec{\theta}}}}.
+\hat{\theta} \quad\text{t.c.}\quad \mathcal{L}(\hat{\theta}) = \min\spare{\mathcal{L}\pare{\theta}} \equiv \min\spare{\frac{1}{N}\sum_{n=1}^N l\pare{y_n, f\pare{\ve{x_n}, \ve{\theta}}}}.
 \]
 
 \subsection{Maximum likelihood estimation (MLE)}
 \begin{definition}[Maximum likelihood estimation]
-Definitiamo la MLE, \im{maximum likelihood estimation}, come il valore di $\theta$ che massimizza la probabilità condizionata di aver ottenuto il set di dati $\mathcal{D}$, ovvero:
+Definitiamo la MLE, \im{maximum likelihood estimation}, come il valore di
+$\theta$ che massimizza la probabilità condizionata di aver ottenuto il set di
+dati $\mathcal{D}$, ovvero:
 \begin{equation}
-\hat{\theta}_{\text{MLE}} \equiv \argmax_{\vec{\theta}} p\pare{\mathcal{D}\cond\vec{\theta}}.
+\hat{\theta}_{\text{MLE}} \equiv \argmax_{\ve{\theta}} p\pare{\mathcal{D}\cond\ve{\theta}}.
 \end{equation}
 Se i dati sono campioni indipendenti della stessa distribuzione, allora possiamo anche scrivere
 \begin{equation}
-p\pare{\mathcal{D}\cond\vec{\theta}} = \prod_{n=1}^N p\pare{\vec{y}_n \cond \vec{x}_n, \vec{\theta}}.
+p\pare{\mathcal{D}\cond\ve{\theta}} = \prod_{n=1}^N p\pare{\ve{y}_n \cond \ve{x}_n, \ve{\theta}}.
 \end{equation}
 Definiamo inoltre la NLL, \textsc{negative log-likelihood}, da usare come loss function come:
 \begin{equation}
-l\pare{\vec{\theta}} \equiv -\log p\pare{\mathcal{D}\cond\vec{\theta}} = -\sum_{n=1}^N \log p\pare{\vec{y}_n \cond \vec{x}_n , \vec{\theta}}.
+l\pare{\ve{\theta}} \equiv -\log p\pare{\mathcal{D}\cond\ve{\theta}} = -\sum_{n=1}^N \log p\pare{\ve{y}_n \cond \ve{x}_n , \ve{\theta}}.
 \end{equation}
 \end{definition}
 
@@ -593,11 +650,11 @@ Con queste definizioni abbiamo che la MLE è data
 \begin{itemize}
 \item per supervised learning da:
 \begin{equation}
-\hat{\theta}_{\text{MLE}} = \argmin_{\vec{\theta}} -\sum_{n=1}^N \log p\pare{\vec{y}_n \cond \vec{x}_n, \vec{\theta}};
+\hat{\theta}_{\text{MLE}} = \argmin_{\ve{\theta}} -\sum_{n=1}^N \log p\pare{\ve{y}_n \cond \ve{x}_n, \ve{\theta}};
 \end{equation}
 \item per unsupervised learning da:
 \begin{equation}
-\hat{\theta}_{\text{MLE}} = \argmin_{\vec{\theta}} -\sum_{n=1}^N \log p\pare{\vec{y}_n \cond \vec{\theta}}.
+\hat{\theta}_{\text{MLE}} = \argmin_{\ve{\theta}} -\sum_{n=1}^N \log p\pare{\ve{y}_n \cond \ve{\theta}}.
 \end{equation}
 \end{itemize}
 
@@ -606,22 +663,25 @@ Possiamo giustificare l'uso della MLE pensandola come un'approssimazione del \te
 \begin{example}
 Se abbiamo
 \[
-p\pare{\vec{\theta}\cond\mathcal{D}} = \delta\pare{\vec{\theta}- \hat{\theta}_{\text{MAP}}}
+p\pare{\ve{\theta}\cond\mathcal{D}} = \delta\pare{\ve{\theta}- \hat{\theta}_{\text{MAP}}}
 \]
 con $\hat{\theta}$ il posterior, allora
 \[
-\hat{\theta}_{\text{MAP}} = \argmin_{\vec{\theta}}-\log p\pare{\vec{\theta}\cond\mathcal{D}} = \argmin_{\vec{\theta}} -\log p\pare{\mathcal{D}\cond\vec{\theta}} -\log p\pare{\vec{\theta}},
+\hat{\theta}_{\text{MAP}} = \argmin_{\ve{\theta}}-\log p\pare{\ve{\theta}\cond\mathcal{D}} = \argmin_{\ve{\theta}} -\log p\pare{\mathcal{D}\cond\ve{\theta}} -\log p\pare{\ve{\theta}},
 \]
-ed essendo $p\pare{\vec{\theta}} = 1$ abbiamo
+ed essendo $p\pare{\ve{\theta}} = 1$ abbiamo
 \[
 \pushQED{\qed}
-\hat{\theta}_{\text{MAP}} = \argmin_{\vec{\theta}} -\log p\pare{\mathcal{D}\cond\vec{\theta}} = \hat{\theta}_{\text{MLE}}.\qedhere
+\hat{\theta}_{\text{MAP}} = \argmin_{\ve{\theta}} -\log p\pare{\mathcal{D}\cond\ve{\theta}} = \hat{\theta}_{\text{MLE}}.\qedhere
 \popQED
 \]
 \end{example}
 
 \subsubsection{Distribuzione normale}
-Supponiamo ora di avere una variabile casuale $Y$ distribuita normalmente, i.e. $Y\sim \mathcal{N}\pare{\mu, \sigma^2}$, e sia $\mathcal{D} = \left\{ y_n \tc n=1,\cdots,N \right\}$ un dataset con punti campionati indipendentemente, allora:
+Supponiamo ora di avere una variabile casuale $Y$ distribuita normalmente, i.e.
+$Y\sim \mathcal{N}\pare{\mu, \sigma^2}$, e sia $\mathcal{D} = \left\{ y_n \tc
+n=1,\cdots,N \right\}$ un dataset con punti campionati indipendentemente,
+allora:
 \begin{equation}
 \begin{split}
 \NLL\pare{\mu, \sigma^2} &= -\sum_{n=1}^{N_D}\log\spare{\pare{\frac{1}{2\pi\sigma^2}}^\HALF \exp\pare{-\frac{1}{2\sigma^2}\pare{y_n-\mu}^2}} \\
@@ -637,51 +697,62 @@ Ora estremizzando otteniamo
 \subsubsection{Distribuzione normale multivariata}
 Per una distribuzione multivariata i risultati sono analoghi. Abbiamo
 \begin{equation}
-l\pare{\vec{\mu}, \Sigma} = \log p\pare{\mathcal{D}\cond\vec{\mu},\Sigma} = \frac{N_D}{2}\log\left|\Lambda\right| = -\HALF\sum_{n=1}^{N_D}\pare{\vec{y}_n - \vec{\mu}}^T \Lambda\pare{\vec{y}_n - \vec{\mu}}
+l\pare{\ve{\mu}, \Sigma} = \log p\pare{\mathcal{D}\cond\ve{\mu},\Sigma} = \frac{N_D}{2}\log\left|\Lambda\right| = -\HALF\sum_{n=1}^{N_D}\pare{\ve{y}_n - \ve{\mu}}^T \Lambda\pare{\ve{y}_n - \ve{\mu}}
 \end{equation}
-dove $\Lambda = \Sigma^{-1}$ è la \im{precision matrix}. Dall'estremizzazione segue, come prima, l'empirical mean $\hat{\vec{\mu}}$ e l'empirical covariance matrix $\hat{\Sigma}$:
+dove $\Lambda = \Sigma^{-1}$ è la \im{precision matrix}. Dall'estremizzazione
+segue, come prima, l'empirical mean $\hat{\ve{\mu}}$ e l'empirical covariance
+matrix $\hat{\Sigma}$:
 \begin{align}
-\hat{\vec{\mu}} &= \frac{1}{N_D}\sum_{n=1}^{N_D}\vec{y_n} = \bar{\vec{y}} \\
-\hat{\Sigma} &= \frac{1}{N_D}\sum_{n=1}^{N_D}\pare{\bar{\vec{y}}_n - \bar{\vec{y}}}\pare{\bar{\vec{y}}_n - \bar{\vec{y}}}^T 
+\hat{\ve{\mu}} &= \frac{1}{N_D}\sum_{n=1}^{N_D}\ve{y_n} = \bar{\ve{y}} \\
+\hat{\Sigma} &= \frac{1}{N_D}\sum_{n=1}^{N_D}\pare{\bar{\ve{y}}_n - \bar{\ve{y}}}\pare{\bar{\ve{y}}_n - \bar{\ve{y}}}^T 
 \end{align}
 
 \subsection{Empirical risk minimization (ERM)}
 La MLE può essere generalizzata sostituendo la loss function logaritmica NLL con qualunque altra funzione $l$:
 \begin{equation}
-\mathcal{L}\pare{\vec{\theta}} = \frac{1}{N}\sum_{n=1}^N l\pare{\vec{y}_n, \vec{\theta}; \vec{x}_n}.
+\mathcal{L}\pare{\ve{\theta}} = \frac{1}{N}\sum_{n=1}^N l\pare{\ve{y}_n, \ve{\theta}; \ve{x}_n}.
 \end{equation}
 Questo processo di cambiare loss function è noto come ERM, \im{empirical risk minimization}. %% ???
 
 \begin{example}[ERM per problema di classificazione]
 In un problema di classificazione avremo una loss function
 \begin{equation}
-l_{01}\pare{\vec{y}_n, \vec{\theta}; \vec{x}_n} = \left\{\begin{array}{l@{\quad\text{se}\quad}l}
-1 & \vec{y}_n = f\pare{\vec{x}_n; \vec{\theta}} \\
-0 & \vec{y}_n \neq f\pare{\vec{x}_n; \vec{\theta}} 
+l_{01}\pare{\ve{y}_n, \ve{\theta}; \ve{x}_n} = \left\{\begin{array}{l@{\quad\text{se}\quad}l}
+1 & \ve{y}_n = f\pare{\ve{x}_n; \ve{\theta}} \\
+0 & \ve{y}_n \neq f\pare{\ve{x}_n; \ve{\theta}} 
 \end{array}\right.
 \end{equation}
-dove $f\pare{\vec{x}, \vec{\theta}}$ è un predittore. L'empirical risk diviene
+dove $f\pare{\ve{x}, \ve{\theta}}$ è un predittore. L'empirical risk diviene
 \begin{equation}
-\mathcal{L}\pare{\vec{\theta}} = \frac{1}{N}\sum_{n=1}^N l_{01}\pare{\vec{y}_n, \vec{\theta}; \vec{x}_n},
+\mathcal{L}\pare{\ve{\theta}} = \frac{1}{N}\sum_{n=1}^N l_{01}\pare{\ve{y}_n, \ve{\theta}; \ve{x}_n},
 \end{equation}
-che è il misclassification rate nel training set. In problemi binari possiamo riscrivere il misclassification rate usando l'indicatore binario come definito in \eqref{eq:indicatore-binario}. Se $\tilde{y} \in \left\{ -1, +1 \right\}$ è il time label e $\hat{y}\in \left\{-1, +1\right\} = f\pare{\vec{x}, \vec{\theta}}$ la prediction, allora:
+che è il misclassification rate nel training set. In problemi binari possiamo
+riscrivere il misclassification rate usando l'indicatore binario come definito
+in \eqref{eq:indicatore-binario}. Se $\tilde{y} \in \left\{ -1, +1 \right\}$ è
+il time label e $\hat{y}\in \left\{-1, +1\right\} = f\pare{\ve{x},
+\ve{\theta}}$ la prediction, allora:
 \begin{equation}
 l_{01}\pare{\tilde{y}, \hat{y}} = \mathbb{I}\pare{\tilde{y}\neq\hat{y}} = \mathbb{I}\pare{\tilde{y}\hat{y}<0},
 \end{equation}
 con cui il rischio empirico si scrive
 \begin{equation}
-\mathcal{L}\pare{\vec{\theta}} = \frac{1}{N}\sum_{n=1}^{N}l_{01}\pare{\tilde{y}_n, \hat{y}_n} = \frac{1}{N}\sum_{n=1}^N\mathbb{I}\pare{\tilde{y}_n\hat{y}_n < 0}.
+\mathcal{L}\pare{\ve{\theta}} = \frac{1}{N}\sum_{n=1}^{N}l_{01}\pare{\tilde{y}_n, \hat{y}_n} = \frac{1}{N}\sum_{n=1}^N\mathbb{I}\pare{\tilde{y}_n\hat{y}_n < 0}.
 \end{equation}
-La funzione $l_{01}$ è però problematica in quanto non-smooth e quindi difficile da ottimizzare. In questi casi si può utilizzare una funzione surrogata, definita generalmente come limite superiore convesso, ad esempio
+La funzione $l_{01}$ è però problematica in quanto non-smooth e quindi difficile
+da ottimizzare. In questi casi si può utilizzare una funzione surrogata,
+definita generalmente come limite superiore convesso, ad esempio
 \begin{equation}
-l_{ll}\pare{\tilde{y}, \eta} = -\log{p\pare{\tilde{y}\cond\eta}} = \log\pare{1 + e^{-\tilde{y}\eta}},\qquad p\pare{\tilde{y}\cond\vec{x},\vec{\theta}} = \sigma\pare{\hat{y}\eta} = \frac{1}{1+e^{-\hat{y}\eta}}
+l_{ll}\pare{\tilde{y}, \eta} = -\log{p\pare{\tilde{y}\cond\eta}} = \log\pare{1 + e^{-\tilde{y}\eta}},\qquad p\pare{\tilde{y}\cond\ve{x},\ve{\theta}} = \sigma\pare{\hat{y}\eta} = \frac{1}{1+e^{-\hat{y}\eta}}
 \end{equation}
 \end{example}
 
 \subsection{Altri metodi di minimizzazione}
 
 \subsubsection{Metodo dei momenti}
-Il calcolo di $\nabla_{\vec{\theta}}\NLL\pare{\vec{\theta}} = 0$, ovvero la ricerca dei punti estremi, può essere difficile. Il metodo dei momenti consiste nell'eguagliare i momenti teorici della distribuzione ai momenti empirici, ovvero:
+Il calcolo di $\nabla_{\ve{\theta}}\NLL\pare{\ve{\theta}} = 0$, ovvero la
+ricerca dei punti estremi, può essere difficile. Il metodo dei momenti consiste
+nell'eguagliare i momenti teorici della distribuzione ai momenti empirici,
+ovvero:
 \begin{equation}
 \left.
 \begin{array}{ll}
@@ -696,81 +767,101 @@ Ad esempio per la gaussiana abbiamo:
 &\mu_1 = \mu = \bar{y}, \\
 &\mu_2 = \sigma^2 + \mu^2 = s^2.
 \end{align*}
-In questo caso abbiamo che MOM \(=\) MLE, ma questo non è vero in generale (ad esempio non è vero per la distribuzione uniforme).
+In questo caso abbiamo che MOM \(=\) MLE, ma questo non è vero in generale (ad
+esempio non è vero per la distribuzione uniforme).
 
 \subsubsection{Online recursive estimation}
-Se tutto il dataset $\mathcal{D}$ è noto e disponibile prima che inizi il processo di learning si dice che si fa \im{batch learning}. In alcuni casi però il dataset è disponibile in blocchi e si dice che si fa \im{online learning}. Si ha che $\hat{\vec{\theta}}_{t-1}$ è la predizione dato il blocco $\mathcal{D}_{1:t-1}$, quello che vogliamo fare è trovare $\vec{\theta}_t = f(\hat{\vec{\theta}}_{t-1}, \vec{y}_t)$ con un update ricorsivo.
+Se tutto il dataset $\mathcal{D}$ è noto e disponibile prima che inizi il
+processo di learning si dice che si fa \im{batch learning}. In alcuni casi però
+il dataset è disponibile in blocchi e si dice che si fa \im{online learning}. Si
+ha che $\hat{\ve{\theta}}_{t-1}$ è la predizione dato il blocco
+$\mathcal{D}_{1:t-1}$, quello che vogliamo fare è trovare $\ve{\theta}_t =
+f(\hat{\ve{\theta}}_{t-1}, \ve{y}_t)$ con un update ricorsivo.
 
 \begin{definition}[Moving average]
 Per una gaussiana multivariata si può definire la \im{media mobile} come:
 \begin{equation}
 \begin{split}
-\hat{\vec{\mu}}_t &= \frac{1}{t}\sum_{n=1}^t\vec{y}_n \\
-&= \frac{1}{t}\spare{\pare{t-1}\hat{\vec{\mu}}_{t-1} + \vec{y}_t} = \hat{\vec{\mu}}_{t-1} + \frac{1}{t}\pare{\vec{y}_t - \hat{\vec{\mu}}_{t-1}}.
+\hat{\ve{\mu}}_t &= \frac{1}{t}\sum_{n=1}^t\ve{y}_n \\
+&= \frac{1}{t}\spare{\pare{t-1}\hat{\ve{\mu}}_{t-1} + \ve{y}_t} = \hat{\ve{\mu}}_{t-1} + \frac{1}{t}\pare{\ve{y}_t - \hat{\ve{\mu}}_{t-1}}.
 \end{split}
 \end{equation}
-Nel caso in cui la distribuzione cambi in modo continuo la moving average può anche essere pesata.
+Nel caso in cui la distribuzione cambi in modo continuo la moving average può
+anche essere pesata.
 \end{definition}
 
 \subsection{Regolarizzazione}
-Un problema della MLE (maximum likelihood estimation) e della ERM (empirical risk minimization) è che i parametri tendono ad essere determinati minimizzando il loss nel training set, ma non necessariamente lo minimizzano per i dati futuri. Per ridurre l'entità del problema si può procedere con la regolarizzazione:
+Un problema della MLE (maximum likelihood estimation) e della ERM (empirical
+risk minimization) è che i parametri tendono ad essere determinati minimizzando
+il loss nel training set, ma non necessariamente lo minimizzano per i dati
+futuri. Per ridurre l'entità del problema si può procedere con la
+regolarizzazione:
 \begin{equation}
-\mathcal{L}\pare{\vec{\theta}, \lambda} = \Bigl[ \underbrace{\frac{1}{N}\sum_{n=1}^N l\pare{\vec{y}_n, \vec{\theta}; \vec{x}_n}}_{\mathcal{L}\pare{\vec{\theta}}} + \lambda C\pare{\vec{\theta}} \Bigr],
+\mathcal{L}\pare{\ve{\theta}, \lambda} = \Bigl[ \underbrace{\frac{1}{N}\sum_{n=1}^N l\pare{\ve{y}_n, \ve{\theta}; \ve{x}_n}}_{\mathcal{L}\pare{\ve{\theta}}} + \lambda C\pare{\ve{\theta}} \Bigr],
 \end{equation}
-dove $\lambda$ è detto \im{regularization parameter} e $C\pare{\vec{\theta}}$ è la \im{penality function}, ad esempio si può avere:
+dove $\lambda$ è detto \im{regularization parameter} e $C\pare{\ve{\theta}}$ è
+la \im{penality function}, ad esempio si può avere:
 \[
-C\pare{\vec{\theta}} = -\log{p\pare{\vec{\theta}}}.
+C\pare{\ve{\theta}} = -\log{p\pare{\ve{\theta}}}.
 \]
 
-Per \(\lambda = 1\) e riscalando \(p\pare{\vec{\theta}}\) si ha la NLL:
+Per \(\lambda = 1\) e riscalando \(p\pare{\ve{\theta}}\) si ha la NLL:
 \begin{equation}
-\NLL\pare{\vec{\theta}, \lambda} = - \spare{\sum_{n=1}^N\log{p\pare{\vec{y}_n\cond\vec{x}_n,\vec{\theta}}} + \log{p\pare{\vec{\theta}}}} = -\spare{\log{p\pare{\mathcal{D}\cond\vec{\theta}}} + \log{p\pare{\vec{\theta}}}},
+\NLL\pare{\ve{\theta}, \lambda} = - \spare{\sum_{n=1}^N\log{p\pare{\ve{y}_n\cond\ve{x}_n,\ve{\theta}}} + \log{p\pare{\ve{\theta}}}} = -\spare{\log{p\pare{\mathcal{D}\cond\ve{\theta}}} + \log{p\pare{\ve{\theta}}}},
 \end{equation}
 che implica:
 \begin{equation}
-\hat{\vec{\theta}} = \argmax_{\vec{\theta}}\log{p\pare{\vec{\theta}\cond\mathcal{D}}} = \argmax_{\vec{\theta}}\spare{\log{p\pare{\mathcal{D}\cond\vec{\theta}}} + \log{p\pare{\vec{\theta}}} - \text{const}}.
+\hat{\ve{\theta}} = \argmax_{\ve{\theta}}\log{p\pare{\ve{\theta}\cond\mathcal{D}}} = \argmax_{\ve{\theta}}\spare{\log{p\pare{\mathcal{D}\cond\ve{\theta}}} + \log{p\pare{\ve{\theta}}} - \text{const}}.
 \end{equation}
 Questa stima si chiama MAP (\im{maximum a posterior}) estimation.
 
 
 \subsubsection{Come scegliere \(\lambda\)}
-Un valore (troppo) piccolo per \(\lambda\) equivale a minimizzare il rischio empirico (\im{overfitting}); un valore (troppo) grande equivale a essere troppo vicini al prior (\im{underfitting}). Una soluzione è dividere il training set in due classi: una di training ($\mathcal{D}_{\text{train}},\,80\%$) ed una di validation ($\mathcal{D}_{\text{val}},\,20\%$). Si va quindi a fittare il modello su $\mathcal{D}_{\text{train}}$ per ogni setting $\lambda$ e poi a valutare la performance del modello ottenuto su $\mathcal{D}_{\text{val}}$. Si prende dunque il valore di $\lambda$ per cui si è ottenuta la performance migliore.
+Un valore (troppo) piccolo per \(\lambda\) equivale a minimizzare il rischio
+empirico (\im{overfitting}); un valore (troppo) grande equivale a essere troppo
+vicini al prior (\im{underfitting}). Una soluzione è dividere il training set in
+due classi: una di training ($\mathcal{D}_{\text{train}},\,80\%$) ed una di
+validation ($\mathcal{D}_{\text{val}},\,20\%$). Si va quindi a fittare il
+modello su $\mathcal{D}_{\text{train}}$ per ogni setting $\lambda$ e poi a
+valutare la performance del modello ottenuto su $\mathcal{D}_{\text{val}}$. Si
+prende dunque il valore di $\lambda$ per cui si è ottenuta la performance
+migliore.
 
 \begin{definition}[Regularized empirical risk]
 Definiamo l'\im{empirical risk regolarizzato} come:
 \begin{equation}
-R_\lambda\pare{\vec{\theta}, \mathcal{D}} \equiv \frac{1}{\left|\mathcal{D}\right|}\sum_{\pare{\vec{x}, \vec{y}}\in\mathcal{D}} l\pare{\vec{y}, f\pare{\vec{x}, \vec{\theta}}} + \lambda C\pare{\theta}
+R_\lambda\pare{\ve{\theta}, \mathcal{D}} \equiv \frac{1}{\left|\mathcal{D}\right|}\sum_{\pare{\ve{x}, \ve{y}}\in\mathcal{D}} l\pare{\ve{y}, f\pare{\ve{x}, \ve{\theta}}} + \lambda C\pare{\theta}
 \end{equation}
 \end{definition}
 \noindent
 Il processo che seguiamo è quindi il seguente:
 \begin{enumerate}
-\item costruiamo il modello: $\hat{\vec{\theta}}_\lambda\pare{\mathcal{D}_\text{train}} = \argmin_{\vec{\theta}} R_\lambda\pare{\vec{\theta}, \mathcal{D}_{\text{train}}}\;\forall\lambda$;
-\item calcoliamo il validation risk: $R_\lambda^\text{val} = R_0\pare{\hat{\vec{\theta}}_\lambda\pare{\mathcal{D}_\text{train}}, \mathcal{D}_\text{val}}$;
+\item costruiamo il modello: $\hat{\ve{\theta}}_\lambda\pare{\mathcal{D}_\text{train}} = \argmin_{\ve{\theta}} R_\lambda\pare{\ve{\theta}, \mathcal{D}_{\text{train}}}\;\forall\lambda$;
+\item calcoliamo il validation risk: $R_\lambda^\text{val} = R_0\pare{\hat{\ve{\theta}}_\lambda\pare{\mathcal{D}_\text{train}}, \mathcal{D}_\text{val}}$;
 \item prendiamo il \(\lambda\) che ha dato la miglior performance: \(\lambda^\star = \argmin_{\lambda\in S} R_\lambda^\text{val}\);
 \item si ri-fitta il modello su \(\mathcal{D} = \mathcal{D}_\text{train}\cup\mathcal{D}_\text{val}\) usando \( \lambda=\lambda^\star \);
-\item si ottengono i parametri \(\hat{\vec{\theta}}^\star = \argmin_{\vec{\theta}} R_{\lambda^\star}\pare{\vec{\theta}, \mathcal{D}}\).
+\item si ottengono i parametri \(\hat{\ve{\theta}}^\star = \argmin_{\ve{\theta}} R_{\lambda^\star}\pare{\ve{\theta}, \mathcal{D}}\).
 \end{enumerate}
 
     Se il dataset è piccolo, eliminare il \( 20\% \) dei dati può essere dannoso e si procede quindi con la \im{cross validation}. Questa consiste nel dividere il dataset in $K$ \im{fold} e per ognuno allenare il modello su tutti i fold meno il \(k\)-esimo, il quale viene usato come test fold. Si definisce l'empirical risk regolarizzato per cross validation:
     \begin{equation}
-    R_\lambda^\text{CV} \equiv \frac{1}{K} \sum_{k=1}^K R_0\pare{\hat{\vec{\theta}}_\lambda\pare{\mathcal{D} - \mathcal{D}_k}, \mathcal{D}_k}
+    R_\lambda^\text{CV} \equiv \frac{1}{K} \sum_{k=1}^K R_0\pare{\hat{\ve{\theta}}_\lambda\pare{\mathcal{D} - \mathcal{D}_k}, \mathcal{D}_k}
     \end{equation}
 
 \subsection{Statistica Bayesiana}
     Abbiamo ora visto diversi metodi per determinare i parametri a partire dei dati, ma dobbiamo
     ancora parlare della loro incertezza. Il \Crefn{teo:bayes} ci aiuta in questo, infatti:
     \begin{equation}
-        p\pare{\vec{\theta}\cond \mathcal{D}} = \frac{p\pare{\vec{\theta}} p\pare{\mathcal{D}\cond\vec{\theta}}}{p\pare{\mathcal{D}}} = \frac{p\pare{\vec{\theta}} p\pare{\mathcal{D}\cond\vec{\theta}}}{\int p\pare{\vec{\theta}'}p\pare{\mathcal{D}\cond\vec{\theta}'}d\vec{\theta}'}
+        p\pare{\ve{\theta}\cond \mathcal{D}} = \frac{p\pare{\ve{\theta}} p\pare{\mathcal{D}\cond\ve{\theta}}}{p\pare{\mathcal{D}}} = \frac{p\pare{\ve{\theta}} p\pare{\mathcal{D}\cond\ve{\theta}}}{\int p\pare{\ve{\theta}'}p\pare{\mathcal{D}\cond\ve{\theta}'}d\ve{\theta}'}
     \end{equation}
 
-    dove \(\mathcal{D} = \{ \left( \vec{x}_n, \vec{y}_n \right) \} \) per supervised learning
-    e \(\mathcal{D} = \{ \left( \vec{y}_n \right) \} \) per unsupervised learning, \(n = 1,\ldots, N \).
+    dove \(\mathcal{D} = \{ \left( \ve{x}_n, \ve{y}_n \right) \} \) per supervised learning
+    e \(\mathcal{D} = \{ \left( \ve{y}_n \right) \} \) per unsupervised learning, \(n = 1,\ldots, N \).
 
     Una voltache il posterior sui paramentri è stato determinato, possiamo calcolare il posterior
-    della distribuzione predittiva marginalizzando su \(\vec{\theta}\):
+    della distribuzione predittiva marginalizzando su \(\ve{\theta}\):
     \begin{equation}
-        p \left( \vec{y}\cond\vec{x}, \mathcal{D} \right) = \int p \left( \vec{y}\cond\vec{x}, \theta \right) p \left( \vec{\theta}\cond\mathcal{D} \right) d\theta,
+        p \left( \ve{y}\cond\ve{x}, \mathcal{D} \right) = \int p \left( \ve{y}\cond\ve{x}, \theta \right) p \left( \ve{\theta}\cond\mathcal{D} \right) d\theta,
     \end{equation}
     questo è noto come BMA (\im{Bayes model averaging}).
 
@@ -803,7 +894,7 @@ Il processo che seguiamo è quindi il seguente:
 
     La precisione del posterior \(\hat{\lambda}\) è dunque la precisione del prior \(\check{\lambda}\)
     più \(N\) unità di misura di precisione \(\kappa\). La media del posterior (\(\hat{m}\)) è invece
-    una combinazione convessa della media empirica $\bar{y}$ e della media del prior \(\check{m}\).
+    una combinazione convessa della media empirica \(\bar{y}\) e della media del prior \(\check{m}\).
     Consideriamo ora il posterior dopo aver visto un singolo dato \(y\) (i.e. abbiamo \(N = 1\)),
     si ha che la \im{posteriori mean} può essere data in tre modi:
     \begin{equation}
@@ -832,7 +923,7 @@ Il processo che seguiamo è quindi il seguente:
         Qualunque modello Bayesiano richiede di specificare un prior \(p \left( \theta \right)\) per i parametri.
         I parametri del prior sono detti \textbf{iperparametri} e sono denotati con \(\Phi\). Se non
         sono noti possiamo mettrci sopra un prior (multi-level model \(\Phi\rightarrow\theta\mathcal{D}\)) e
-        definire la joint distribution \(p \left( \vec{\phi}, \vec{\theta}, \mathcal{D} \right) = p \left( \vec{\Phi} \right) p \left( \vec{\theta} \cond \vec{\Phi}\right) p \left( \mathcal{D} \cond \theta \right)\).
+        definire la joint distribution \(p \left( \ve{\phi}, \ve{\theta}, \mathcal{D} \right) = p \left( \ve{\Phi} \right) p \left( \ve{\theta} \cond \ve{\Phi}\right) p \left( \mathcal{D} \cond \theta \right)\).
     \end{observation}
 
     \begin{table}[]
@@ -840,9 +931,9 @@ Il processo che seguiamo è quindi il seguente:
             \toprule
             Method & Definition \\
             \midrule
-            MLE & \( \hat{\vec{\theta}} = \argmax_{\vec{\theta}} p \left( \mathcal{D}\cond \theta \right) \) \\
-            MAP & \( \hat{\vec{\theta}} = \argmax_{\vec{\theta}} p \left( \mathcal{D}\cond \theta \right) p \left( \vec{\theta} \cond \vec{\Phi} \right)\) \\
-            Full Bayes & \( p \left( \vec{\phi}, \vec{\theta}, \mathcal{D} \right) \propto p \left( \vec{\Phi} \right) p \left( \vec{\theta} \cond \vec{\Phi}\right) p \left( \mathcal{D} \cond \theta \right) \) \\
+            MLE & \( \hat{\ve{\theta}} = \argmax_{\ve{\theta}} p \left( \mathcal{D}\cond \theta \right) \) \\
+            MAP & \( \hat{\ve{\theta}} = \argmax_{\ve{\theta}} p \left( \mathcal{D}\cond \theta \right) p \left( \ve{\theta} \cond \ve{\Phi} \right)\) \\
+            Full Bayes & \( p \left( \ve{\phi}, \ve{\theta}, \mathcal{D} \right) \propto p \left( \ve{\Phi} \right) p \left( \ve{\theta} \cond \ve{\Phi}\right) p \left( \mathcal{D} \cond \theta \right) \) \\
             \bottomrule
         \end{tabular}
         \caption{Metodi visti per ottenere i parametri.}\label{tab:metodi-parametri}
@@ -855,7 +946,7 @@ Il processo che seguiamo è quindi il seguente:
     intervallo di credibilità che quantifichi l'incertezza associata alle stime.
 
     \begin{definition}[Intervallo di credibilità]
-        L'\im{intervallo di credibilità} \(100\left( 1 - \alpha \right)\%\) è la regione \(C = \left( l, u \right)\)
+        L'\im{intervallo di credibilità} \( 100\left( 1 - \alpha \right)\% \) è la regione \(C = \left( l, u \right)\)
         che contiene \( 1 - \alpha \) della probabilità posteriore, ovvero:
         \begin{equation}
             C_\alpha \left( \mathcal{D} \right) = \left( l, u \right) \tc P\left( l \leq \theta \leq u \cond \mathcal{D} \right) = 1 - \alpha
@@ -867,8 +958,8 @@ Il processo che seguiamo è quindi il seguente:
 
     \begin{definition}[Intervallo di confidenza]
         Si dice \im{intervallo di confidenza} \(100 \left( 1 - \alpha \right)\% \), per la stima di un
-        parametro \(\theta\), la regione \(I ( \tilde{\mathcal{D}} ) = ( l( \mathcal{\tilde{D}} ), u( \mathcal{\tilde{D}} ) )\)
-        ottenuto da un data set \(\mathcal{D}\) talse che
+        parametro \( \theta \), la regione \(I ( \tilde{\mathcal{D}} ) = ( l( \mathcal{\tilde{D}} ), u( \mathcal{\tilde{D}} ) )\)
+        ottenuto da un data set \(\mathcal{D}\) tale che
         \begin{equation}
             \pr \left( \theta \in I \left( \mathcal{\tilde{D}} \cond \mathcal{D} \sim \theta \right) \right) = 1 - \alpha.
         \end{equation}
@@ -877,15 +968,82 @@ Il processo che seguiamo è quindi il seguente:
 
     \begin{observation}
         L'intervallo di credibilità è un concetto Bayesiano mentre l'intervallo di
-        confidenza è un concetto frequentista. CL (frequentista): \(\theta\) è una costante fissa
+        confidenza è un concetto frequentista. CL (frequentista): \( \theta \) è una costante fissa
         non nota e i dati sono aleatori. CI (Bayesiano): i dati sono fissi perchè noti,
-        \(\theta\) è invece ignota. Un CL al \(95\%\) \underline{non} significa che il
-        parametro stia verosimilmente dentro l'intervallo il \(95\%\) delle volta dati
+        \( \theta \) è invece ignota. Un CL al \( 95\% \) \underline{non} significa che il
+        parametro stia verosimilmente dentro l'intervallo il \( 95\% \) delle volta dati
         i dati osservati.
     \end{observation}
 
     \begin{example}
-        
+        Supponiamo di generare due interi \( \mathcal{D} = \left( y_1, y_2 \right) \) da:
+        \[
+            p \left( y\cond \theta \right) = \left\{
+            \begin{array}{l@{\quad\text{se}\quad}l}
+                0.5 & y = \theta \\
+                0.5 & y = \theta + 1 \\
+                0 & \text{altrimenti} \\
+            \end{array}\right..
+        \]
+        Se \( \theta = 39 \) possiamo ottenere i seguenti risultati:
+        \[
+            \left( 39, 39 \right), \left( 39, 40 \right), \left( 40, 39 \right), \left( 40, 40 \right).
+        \]
+        Sia \( m = \min \left( y_1, y_2 \right) \) e l'intervallo
+        \( \left[ l(\mathcal{D}), U(\mathcal{D}) \right] = [m, m] \). Segue che i possibili intervalli
+        sono:
+        \[
+            [39, 39], [39, 39], [39, 39], [40, 40]
+        \]
+        e dunque l'intervallo definito risulta in un CI \( 75\% \) per \( \theta = 39\).
+        Se però osserviamo \( \mathcal{D} = \left( 39, 40 \right) \) allora
+        \( p \left( \theta=39 \cond \mathcal{D} \right) \), ma CI è solo \( 75\% \). Il CI fallisce per esperimenti
+        \underline{non} ripetibili.
     \end{example}
+
+\subsection{Bias-variance tradeoff}
+    Sia \( \hat{\theta} \) lo stimatore statistico e \( \hat{\theta} \left( \mathcal{D} \right) \) l'estimando. Nel formalismo
+    frequentista i dati sono variabili casuali campionati da una distribuzione
+    \( p^\star \left( \mathcal{D} \right)\), che induce una distribuzione sull'estimendo
+    \( p^\star \left( \hat{\theta} \left( \mathcal{D} \right) \right) \).
+
+    \begin{definition}[Bias]
+        Il \im{bias} di uno stimatore \( \hat{\theta} \) è definito come:
+        \begin{equation}
+            \bias \left( \theta(\cdot) \right) \equiv \mathbb{E} \left[ \hat{\theta} \left( \mathcal{D} \right) \right] - \theta^\star
+        \end{equation}
+        dove \( \theta^\star \) è il valore vero. Se il bias è nulla, lo stimatore viene detto
+        \im{unbiased}.
+    \end{definition}
+
+    Per una gaussiana abbiamo:
+    \begin{align}
+        & \bias \left( \hat{\mu} \right) = \mathbb{E} \left[\bar{x}\right] - \mu = \mathbb{E} \left[ \frac{1}{N_D}\sum_{n=1}^{N_D} x_n \right] - \mu = \frac{N_D \mu}{N_D} - \mu = 0  \quad \Longrightarrow \quad \text{Unbiased},  \\
+        & \bias \left( \hat{\sigma}^2 \right) = \mathbb{E} \left[ s^2 \right] - \sigma^2 = \frac{N_D - 1}{N_D}\sigma^2 - \sigma^2 \neq 0  \quad \Longrightarrow \quad \text{Biased}.
+    \end{align}
+    Possiamo però definire una versione unbiased della varianza come:
+    \begin{equation}
+        \sigma^2_{\text{unb}} = \frac{1}{N_D - 1}\sum_{n=1}^{N_D} {\left( x_n - \bar{x} \right)}^2 = \frac{N_D}{N_D - 1}\sigma^2_{\MLE}
+    \end{equation}
+
+    \begin{definition}[Varianza di uno stimatore]
+        La \im{varianza di uno stimatore} è
+        \begin{equation}
+            \mathbb{V} ( \hat{\theta} ) \equiv \mathbb{E} ( \hat{\theta}^2 ) - {( \mathbb{E} [ \hat{\theta} ] )}^2
+        \end{equation}
+    \end{definition}
+
+    Idealmente vogliamo avere una varianza minima per tutti gli stimatori. Il seguente
+    teorema fornisce un limite minimo alla varianza.
+
+    \begin{theorem}[Disuguaglianza di Cramér-Rao]
+        Per uno stimatore \underline{unbiased} \( \theta^\star \) si ha che:
+        \begin{equation}
+            \mathbb{V} \left[ \hat{\theta} \right] \geq \frac{1}{NF(\theta^\star)},
+        \end{equation}
+        ove \( F(\theta^\star) \) è la \im{Fisher information}.
+    \end{theorem}
+
+
 
 \end{document}
