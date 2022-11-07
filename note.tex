@@ -1041,9 +1041,40 @@ Il processo che seguiamo è quindi il seguente:
         \begin{equation}
             \mathbb{V} \left[ \hat{\theta} \right] \geq \frac{1}{NF(\theta^\star)},
         \end{equation}
-        ove \( F(\theta^\star) \) è la \im{Fisher information}.
+        ove \( F(\theta^\star) \) è la \textit{Fisher information}.
     \end{theorem}
 
+    Si può dimostrare che la MLE raggiunge il bond imposto da Cramér-Rao. Sia
+    \( \hat{\theta} = \hat{\theta} \left( \mathcal{D} \right) \) l'estimato e \(
+    \bar{\theta} = \mathbb{E} \left[ \hat{\theta} \right] \) il valore di
+    aspettazione corrsispondente (tutti da \(p \left(
+    \mathcal{D}\cond\theta^\star \right) \)), allora:
 
+    \begin{equation}
+        \begin{split}
+            \mathbb{E} \left[ {\left( \hat{\theta} - \theta^* \right)}^2 \right] &= \mathbb{E} \left[ {\left[ ( \hat{\theta} - \bar{\theta} ) + ( \bar{\theta} - \theta^\star )\right]}^2 \right] \\
+            &= \mathbb{E} \left[ {\left( \hat{\theta} - \bar{\theta} \right)}^2 \right] + 2\mathbb{E} \left[ {\left( \hat{\theta}-\bar{\theta} \right)}^2 \right] + 2\left( \bar{\theta} - \theta^\star \right)\mathbb{E} \left[ \hat{\theta} - \theta^\star \right] + {\bar{\theta}-\theta^\star}^2 \\
+            &= \mathbb{E} \left[ {\left( \hat{\theta} - \bar{\theta} \right)}^2 \right]  + {\left( \bar{\theta} - \theta^\star \right)}^2 = \mathbb{V}\left[\hat{\theta}\right] + \bias^2 \left( \hat{\theta} \right)
+        \end{split}
+    \end{equation}
+
+    \begin{example}
+        Supponiamo di stimare la media di una distribuzionne gaussiana a partire dai dati
+        \mbox{\( \ve{x} = \left( x_1, \ldots, x_n \right) \)} assumendo che questi siano stati campionati da
+        \( x_n \sim \mathcal{N} \left( \theta^\star = 1, \sigma^2 \right) \). Uno stimatore ovvio è dato dalla MLE
+        che ha bias nullo e varianza \( \mathbb{V} [\bar{x}/\theta^\star] = \sigma^2/N \).
+        Possiamo dare uno stimatore MAP sotto un prior gaussiano, in tal caso:
+        \[
+            \tilde{x} = \frac{N}{N + \kappa_0} \bar{x} + \frac{\kappa_0}{N + \kappa_0}\theta_0 = w\bar{x} + \left( 1-w \right) \theta_0
+        \]
+        con prior \( \mathcal{N} \left( \theta_0, \sigma^2 / \kappa_0 \right) \). Allora abbiamo:
+        \begin{align*}
+            &\mathbb{E}_{\text{MAP}} \left[ \tilde{x} \right] - \theta^\star = w\theta^\star + (1 - w)\theta_0 - \theta^\star = \left( 1-w \right) \left( \theta_0 - \theta^\star \right),  \\
+            &\mathbb{V}_{\text{MAP}} \left[ \tilde{x} \right] = w^2\frac{\sigma^2}{N} < \mathbb{V}_\text{MLE} .\left[ \hat{x} \right],
+        \end{align*}
+        ovvero è uno stimatore biased essendo \( 0 < w < 1\).
+    \end{example}
+
+    
 
 \end{document}
