@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.11.2)  7 NOV 2022 14:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.11.2)  7 NOV 2022 17:56
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -22,7 +22,7 @@ File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
 \abovecaptionskip=\skip47
 \belowcaptionskip=\skip48
 \bibindent=\dimen138
-) (c:/texlive/2022/texmf-dist/tex/latex/amsmath/amsmath.sty
+) (./settings.tex (c:/texlive/2022/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2022/04/08 v2.17n AMS math features
 \@mathmargin=\skip49
 
@@ -125,34 +125,12 @@ Version 1.0, Aug 13, 1994
 \@Rightmargin=\dimen149
 \@Topmargin=\dimen150
 \@Bottommargin=\dimen151
-) (c:/texlive/2022/texmf-dist/tex/latex/listings/listings.sty (c:/texlive/2022/texmf-dist/tex/latex/graphics/keyval.sty
+) (c:/texlive/2022/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
+ (c:/texlive/2022/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \KV@toks@=\toks27
-)
-\lst@mode=\count271
-\lst@gtempboxa=\box53
-\lst@token=\toks28
-\lst@length=\count272
-\lst@currlwidth=\dimen152
-\lst@column=\count273
-\lst@pos=\count274
-\lst@lostspace=\dimen153
-\lst@width=\dimen154
-\lst@newlines=\count275
-\lst@lineno=\count276
-\lst@maxwidth=\dimen155
- (c:/texlive/2022/texmf-dist/tex/latex/listings/lstmisc.sty
-File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
-\c@lstnumber=\count277
-\lst@skipnumbers=\count278
-\lst@framebox=\box54
-) (c:/texlive/2022/texmf-dist/tex/latex/listings/listings.cfg
-File: listings.cfg 2020/03/24 1.8d listings configuration
-))
-Package: listings 2020/03/24 1.8d (Carsten Heinz)
- (c:/texlive/2022/texmf-dist/tex/latex/graphics/graphicx.sty
-Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
- (c:/texlive/2022/texmf-dist/tex/latex/graphics/graphics.sty
+) (c:/texlive/2022/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2022/03/10 v1.4e Standard LaTeX Graphics (DPC,SPQR)
  (c:/texlive/2022/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
@@ -162,12 +140,34 @@ File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 Package graphics Info: Driver file: pdftex.def on input line 107.
  (c:/texlive/2022/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2022/09/22 v1.2b Graphics/color driver for pdftex
-\stockwidth=\dimen156
-\stockheight=\dimen157
+\stockwidth=\dimen152
+\stockheight=\dimen153
 ))
-\Gin@req@height=\dimen158
-\Gin@req@width=\dimen159
-) (c:/texlive/2022/texmf-dist/tex/generic/babel/babel.sty
+\Gin@req@height=\dimen154
+\Gin@req@width=\dimen155
+) (c:/texlive/2022/texmf-dist/tex/latex/listings/listings.sty
+\lst@mode=\count271
+\lst@gtempboxa=\box53
+\lst@token=\toks28
+\lst@length=\count272
+\lst@currlwidth=\dimen156
+\lst@column=\count273
+\lst@pos=\count274
+\lst@lostspace=\dimen157
+\lst@width=\dimen158
+\lst@newlines=\count275
+\lst@lineno=\count276
+\lst@maxwidth=\dimen159
+ (c:/texlive/2022/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
+\c@lstnumber=\count277
+\lst@skipnumbers=\count278
+\lst@framebox=\box54
+) (c:/texlive/2022/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2020/03/24 1.8d listings configuration
+))
+Package: listings 2020/03/24 1.8d (Carsten Heinz)
+ (c:/texlive/2022/texmf-dist/tex/generic/babel/babel.sty
 Package: babel 2022/10/23 3.82 The Babel package
 \babel@savecnt=\count279
 \U@D=\dimen160
@@ -295,7 +295,7 @@ Package: array 2022/03/10 v2.5f Tabular extension package (FMi)
 \extratabsurround=\skip55
 \backup@length=\skip56
 \ar@cellbox=\box63
-)) (c:/texlive/2022/texmf-dist/tex/latex/xcolor/xcolor.sty
+))) (c:/texlive/2022/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2022/06/12 v2.14 LaTeX color extensions (UK)
  (c:/texlive/2022/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
@@ -311,46 +311,45 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1373.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1374.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1375.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1376.
-)
+) (./macros.tex
 \c@theorem=\count302
 \c@example=\count303
 \c@property=\count304
 \c@definition=\count305
 \c@observation=\count306
- (c:/texlive/2022/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+) (c:/texlive/2022/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-10-26 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count307
 \l__pdf_internal_box=\box64
 ) (./note.aux)
 \openout1 = `note.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
-\c@lstlisting=\count308
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
  (c:/texlive/2022/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count309
+\scratchcounter=\count308
 \scratchdimen=\dimen181
 \scratchbox=\box65
-\nofMPsegments=\count310
-\nofMParguments=\count311
+\nofMPsegments=\count309
+\nofMParguments=\count310
 \everyMPshowfont=\toks33
-\MPscratchCnt=\count312
+\MPscratchCnt=\count311
 \MPscratchDim=\dimen182
-\MPnumerator=\count313
-\makeMPintoPDFobject=\count314
+\MPnumerator=\count312
+\makeMPintoPDFobject=\count313
 \everyMPtoPDFconversion=\toks34
 ) (c:/texlive/2022/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -358,8 +357,9 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (c:/texlive/2022/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-LaTeX Info: Redefining \it@ocap on input line 121.
-LaTeX Info: Redefining \it@ccap on input line 121.
+\c@lstlisting=\count314
+LaTeX Info: Redefining \it@ocap on input line 33.
+LaTeX Info: Redefining \it@ccap on input line 33.
 
 
 File italian.ldf warning: 
@@ -367,14 +367,14 @@ italian.ldf    With OT1 encoding guillemets are poorly faked
 italian.ldf    Use T1 encoding
 italian.ldf    or specify a font with command \CaporaliFrom
 italian.ldf    See the documentation concerning the babel-italian typesetting 
-italian.ldf    on input line 121.
+italian.ldf    on input line 33.
 
-Package translations Info: no dictionary file `translations-basic-dictionary-italian.trsl' found. on input line 121.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 127.
+Package translations Info: no dictionary file `translations-basic-dictionary-italian.trsl' found. on input line 33.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 39.
 (c:/texlive/2022/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 127.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 39.
  (c:/texlive/2022/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
@@ -383,36 +383,36 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 <Images/iris_decision_tree.PNG, id=21, 772.38562pt x 415.5525pt>
 File: Images/iris_decision_tree.PNG Graphic file (type png)
 <use Images/iris_decision_tree.PNG>
-Package pdftex.def Info: Images/iris_decision_tree.PNG  used on input line 259.
+Package pdftex.def Info: Images/iris_decision_tree.PNG  used on input line 171.
 (pdftex.def)             Requested size: 446.13727pt x 240.0251pt.
  [2] [3 <./Images/iris_decision_tree.PNG>] [4] [5] [6]
 <Images/distributions.PNG, id=45, 703.12688pt x 493.0922pt>
 File: Images/distributions.PNG Graphic file (type png)
 <use Images/distributions.PNG>
-Package pdftex.def Info: Images/distributions.PNG  used on input line 521.
+Package pdftex.def Info: Images/distributions.PNG  used on input line 433.
 (pdftex.def)             Requested size: 446.13727pt x 312.8693pt.
  [7] [8 <./Images/distributions.PNG>] [9] [10] [11] [12] [13]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 929.
+               Default added (so using `tbp') on input line 841.
 
-[14] [15] [16] (./note.aux
+[14] [15] [16] [17] (./note.aux
 Package cleveref Info: loaded `italian' language definitions on input line 4.
 Package cleveref Info: loaded `italian' language definitions on input line 5.
 ) ) 
 Here is how much of TeX's memory you used:
- 12641 strings out of 475066
- 258049 string characters out of 5782773
- 627182 words of memory out of 5000000
- 33888 multiletter control sequences out of 15000+600000
+ 12648 strings out of 475066
+ 258202 string characters out of 5782773
+ 626960 words of memory out of 5000000
+ 33889 multiletter control sequences out of 15000+600000
  484219 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 71i,24n,77p,439b,824s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 76i,24n,80p,439b,824s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {c:/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}<c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on note.pdf (16 pages, 528449 bytes).
+Output written on note.pdf (17 pages, 537539 bytes).
 PDF statistics:
- 183 PDF objects out of 1000 (max. 8388607)
- 111 compressed objects within 2 object streams
+ 186 PDF objects out of 1000 (max. 8388607)
+ 113 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

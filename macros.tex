@@ -1,0 +1,56 @@
+
+
+% ============ MATH ============
+% Vector bold
+\newcommand{\ve}[1]{\bm{#1}}
+% Tensor upright
+\newcommand{\tens}[1]{\mathsf{#1}}
+% Derivatives
+\newcommand{\deriv}[3][]{
+	\ensuremath{\frac{d^{#1}{#2}}{d{#3}^{#1}}}
+}
+\newcommand{\pderiv}[3][]{
+	\ensuremath{\frac{\partial^{#1}{#2}}{\partial{#3}^{#1}}}
+}
+% Tale Che
+\newcommand{\tc}{\ensuremath{\;\text{t.c.}\;}}
+\newcommand{\tcq}{\ensuremath{\quad\text{t.c.}\quad}}
+% Logic
+\newcommand{\et}{\wedge}
+\newcommand{\orr}{\vee}
+\newcommand{\cond}{\mid}
+
+% === Operators ===
+% Dominium
+\DeclareMathOperator{\Dom}{Dom}
+% Argmin & Argmax
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+
+% ------------ NEW THEOREMS ------------
+% >> In Theorem Style
+% Teorema
+\newtheorem{theorem}{Teorema}[section]
+\crefname{theorem}{Teorema}{Teoremi}
+% >> In Definition Style
+\theoremstyle{definition}
+% Esempio
+\newtheorem{example}{Esempio}[section]
+\crefname{example}{Esempio}{Esempi}
+% Proprietà
+\newtheorem{property}{Proprietà}[subsection]
+\crefname{property}{Proprietà}{Proprietà}
+% Definizione
+\newtheorem{definition}{Definizione}[section]
+\crefname{definition}{Definizione}{Definizioni}
+% Osservazione
+\newtheorem{observation}{Osservazione}[subsection]
+\crefname{observation}{Osservazione}{Osservazioni}
+
+% ============ REFERENCES ============
+
+% Named Cref
+\newcommand{\Crefn}[1]{\Cref{#1} (\nameref{#1})}
+
+% ============ TEXT ============
+\newcommand{\im}[1]{\textsc{#1}}

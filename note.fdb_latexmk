@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1667828336 "f:/Documents/UNI/Magistrale/Machine Learning/note.tex" "note.pdf" "note" 1667828339
+["pdflatex"] 1667840173 "f:/Documents/UNI/Magistrale/Machine Learning/note.tex" "note.pdf" "note" 1667840175
   "Images/distributions.PNG" 1666136652 101993 f4d8db927122041f43b35efaeaed0987 ""
   "Images/iris_decision_tree.PNG" 1666020437 103885 b4aa5328b214ad6316044eb1b773a9ff ""
   "c:/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1667350196 2900 1537cc8184ad1792082cd229ecc269f4 ""
@@ -130,9 +130,11 @@
   "c:/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1667363326 4648419 cd736d89bc726120ec8d74e8e9beb636 ""
   "c:/texlive/2022/texmf-var/web2c/pdftex/pdflatex.fmt" 1667363436 3058742 006232be72ea64c51c4bd7506a5f7822 ""
   "c:/texlive/2022/texmf.cnf" 1667363300 713 e69b156964470283e0530f5060668171 ""
-  "f:/Documents/UNI/Magistrale/Machine Learning/note.tex" 1667828335 52339 a1a9c5961d9581127b1a0767997753fc ""
-  "note.aux" 1667828338 9904 f45b2f8b3db82ebf7b584a5ce714a7e8 "pdflatex"
-  "note.tex" 1667828335 52339 a1a9c5961d9581127b1a0767997753fc ""
+  "f:/Documents/UNI/Magistrale/Machine Learning/note.tex" 1667840172 56023 0de875967d942604847c034ee85e3080 ""
+  "macros.tex" 1667839080 1495 f48074e83d21fb2c551b0b5a57ea82c5 ""
+  "note.aux" 1667840175 11035 84e413b6bfcc79f01677ae10aa8692ec "pdflatex"
+  "note.tex" 1667840172 56023 0de875967d942604847c034ee85e3080 ""
+  "settings.tex" 1667838488 1361 eb9322d8905a442e78e821bc9742b677 ""
   (generated)
   "note.aux"
   "note.log"

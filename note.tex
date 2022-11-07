@@ -1,52 +1,7 @@
 \documentclass[10pt]{article}
-\usepackage{amsmath,amsthm}
-\usepackage{amssymb}
-\usepackage{bm}
 
-\usepackage{anysize}
-\usepackage{listings}
-\usepackage{graphicx}
-
-\usepackage[italian]{babel}
-
-\usepackage{booktabs}
-
-\usepackage{thmtools}
-\usepackage[italian]{cleveref}
-\usepackage{nameref}
-
-\usepackage{siunitx}
-
-\usepackage{xcolor}
-
-\definecolor{Blue}{rgb}{0.2,0.2,0.9}
-\definecolor{Green}{rgb}{0,0.6,0}
-\definecolor{Gray}{rgb}{0.5,0.5,0.5}
-\definecolor{Purple}{rgb}{0.58,0,0.82}
-\definecolor{background}{rgb}{0.98,0.98,0.95}
-
-\lstdefinestyle{mystyle}{
-    backgroundcolor=\color{background},   
-    commentstyle=\color{Green},
-    keywordstyle=\color{Blue},
-    numberstyle=\tiny\color{Gray},
-    stringstyle=\color{Purple},
-    basicstyle=\ttfamily\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
-    showstringspaces=false,
-    showtabs=false,                  
-    tabsize=2
-}
-
-
-\lstset{style=mystyle}
-
+\input{settings}
+\input{macros}
 
 %%% OPERATORS
     \DeclareMathOperator{\pr}{Pr}
@@ -57,66 +12,23 @@
 \DeclareMathOperator{\Unif}{Unif}
 \DeclareMathOperator{\Cov}{Cov}
 \DeclareMathOperator{\corr}{corr}
-\DeclareMathOperator*{\argmax}{argmax}
-\DeclareMathOperator*{\argmin}{argmin}
 \DeclareMathOperator{\NLL}{NLL}
 \DeclareMathOperator{\bias}{bias}
 %%%
 
 %% MATH MISC
-\newcommand{\ve}[1]{\bm{#1}}
-\newcommand{\tens}[1]{\mathsf{#1}}
-\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2} }
 \newcommand{\HALF}{\frac{1}{2}}
-\newcommand{\DS}{\displaystyle}
-%% TEXT
-\newcommand{\im}[1]{\textsc{#1}}
-%% LOGIC
-\newcommand{\et}{\wedge}
-\newcommand{\orr}{\vee}
-\newcommand{\cond}{\mid}
+
 %% PARENTESIS
-\newcommand{\lp}{\left}
-\newcommand{\rp}{\right}
 \newcommand{\pare}[1]{
 	\ensuremath{\left(#1\right)}
 }
 \newcommand{\spare}[1]{
 	\ensuremath{\left[#1\right]}
 }
-%% DERIVATE
-\newcommand{\deriv}[3][]{
-	\ensuremath{\frac{d^{#1}{#2}}{d{#3}^{#1}}}
-}
-\newcommand{\pderiv}[3][]{
-	\ensuremath{\frac{\partial^{#1}{#2}}{\partial{#3}^{#1}}}
-}
-%% TALE CHE
-\newcommand{\tc}{\ensuremath{\;\text{t.c.}\;}}
-\newcommand{\tcq}{\ensuremath{\quad\text{t.c.}\quad}}
+
 %% TEXT IN MATH
 \newcommand{\MLE}{\ensuremath{\text{MLE}}}
-%% NAMED CREF
-\newcommand{\Crefn}[1]{\Cref{#1} (\nameref{#1})}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newtheorem{theorem}{Teorema}[section]
-\crefname{theorem}{Teorema}{Teoremi}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\theoremstyle{definition}
-
-\newtheorem{example}{Esempio}[section]
-\crefname{example}{Esempio}{Esempi}
-
-\newtheorem{property}{Proprietà}[subsection]
-\crefname{property}{Proprietà}{Proprietà}
-
-\newtheorem{definition}{Definizione}[section]
-\crefname{definition}{Definizione}{Definizioni}
-
-\newtheorem{observation}{Osservazione}[subsection]
-\crefname{observation}{Osservazione}{Osservazioni}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
@@ -1075,6 +987,116 @@ Il processo che seguiamo è quindi il seguente:
         ovvero è uno stimatore biased essendo \( 0 < w < 1\).
     \end{example}
 
-    
+\section{Ottimizzazione}
+    Abbiamo viesto nelle precedenti lezioni che il machine learning ha come
+    obbiettivo quello di stimare dei parametri \( \ve{\theta} \) (o degli iperparametri
+    \( \Phi \)) di un modello, ovvero determinare i valori di best-fit e relativi
+    intervalli di credibilità. Questo si realizza minimizzando una funzione
+    scalare, la less function
+    \[
+        \mathcal{L}: \Theta\rightarrow\mathbb{R},
+    \]
+    dove \( \theta\in\Theta \), per trovare:
+    \[
+        \theta^* = \argmin_{\ve{\theta}} \mathcal{L}\left( \ve{\theta} \right) \quad\text{o meglio}\quad
+        \hat{\theta}=\argmin_{\ve{\theta}} \mathcal{L}\left[ \ve{\theta} \right] \quad\text{per}\;
+        \theta^\star \sim \hat{\theta}.
+    \]
+
+    Assumiamo per semplicità che \( \Theta \subseteq \mathbb{R}^D \), con \(D\) il numero
+    delle variabili ottimizzate, in questo modo abbiamo che l'ottimizzazione
+    è \textbf{continua}.
+
+    \begin{observation}
+        Lo spazio dei parametri è tale che può esistere un solo minimo globale o
+        più minimi globali, oltre ad una serie di minimi locali. Il punto di
+        minimo è computazionalmente \textit{sempre in termini locali}, i.e.:
+        \[
+            \exists \delta > 0 ,\; \forall\ve{\theta}\in\Theta  \quad\tc\quad
+            || \ve{\theta} - \hat{\ve{\theta}} || < \delta ,\;
+            \mathcal{L} (\hat{\ve{\theta}}) < \mathcal{L} (\ve{\theta}).
+        \]
+        un minimo locale può essere circondato da minimi simili (flat direction).
+        Un algoritmo che converge ad un punto stazionario è detto
+        \im{globally convergent}.
+    \end{observation}
+
+    \begin{observation}
+        Per loss function che sono due volte differenziabili possiamo considerare
+        il vettore gradiente \( g\left( \ve{\theta} \right) = \nabla\mathcal{L}\left( \ve{\theta} \right) \) e
+        la matrice Hessiana \( H\left( \ve{\theta} \right)  = \nabla^2 \mathcal{L}\left( \ve{\theta} \right) \).
+        Per un punto \( \hat{\ve{\theta}} \in \mathbb{R}^D \), indicando \( \hat{g} = g\left( \ve{\theta} \right)|_{\hat{\ve{\theta}}} \)
+        e \( \hat{H} = H\left( \ve{\theta	} \right)|_{\hat{\ve{\theta}}} \), abbiamo:
+        \begin{description}
+            \item[condizione necessaria:] se \(\hat{\ve{\theta}}\) è minimo locale, allora \( \hat{g} = \ve{0} \) e \(\hat{H}\) è definita semi-positiva;
+            \item[condizione sufficiente:] se \(\hat{g} = \ve{0}\) e  \( H \) è definita positiva, allora \(\hat{\ve{\theta}}\) è un minimo locale.
+        \end{description}
+    \end{observation}
+
+    \begin{observation}
+        A volte possono esserci vincoli sulla parametrizzazione (\im{constrained
+        parametrization}). I vincoli sono in genere categorizzati in equazioni e disequazioni, ad
+        esempio:
+        \[
+            \begin{split}
+                h_k \left( \ve{\theta} \right) = 0 \; \text{per} \, k\in\mathcal{E}, \\
+                g_j \left( \ve{\theta} \right) \leq 0 \; \text{per} \, j\in\mathcal{I}.
+            \end{split}
+        \]
+        Allora il set di vincoli è:
+        \[
+            \mathcal{C} = \left\{ \ve{\theta} \,\tc \, h_k\left( \ve{\theta} \right) = 0,\, k\in\mathcal{E} \et g_j\left( \ve{\theta} \right) \leq 0,\, j\in\mathcal{I} \right\}
+        \]
+        ed il parametro è dato da:
+        \[
+            \hat{\theta} = \argmin_{\ve{\theta}\in\mathcal{C}} \mathcal{L}\left( \ve{\theta} \right).
+        \]
+        Quando non si hanno vincoli e quindi \( \ve{\theta}\in\mathbb{R}^D \) si parla di \im{unconstrained
+        parametrization}.
+    \end{observation}
+
+    \begin{observation}
+        Può essere utile determinare se la loss function è convessa. Ricordiamo quindi che se una
+        funzione \( f: \mathbb{R}^2\longrightarrow\mathbb{R} \) è doppio differenziabile, allora questa è convessa
+        se e solo se l'Hessiana è definita semi-positiva in ogni punto. \( f \) si dice invece
+        strettamente convessa se l'Hessiana è definita positiva.
+    \end{observation}
+
+    \begin{observation}
+        Nel caso in cui la loss function non sia continua (in un punto) allora si usa definire i
+        \textbf{sottogradienti}. \( \ve{g}\in\mathbb{R}^N \) è un sottogradiente di \( f \) in
+        \( \ve{x} \in \Dom\left( f \right) \) se:
+        \[
+            \forall \ve{\xi} \in \Dom(f),\, f\left( \ve{\xi} \right) \geq f\left( \ve{x} \right) + \ve{g}^T\left( \ve{\xi}-\ve{x} \right).
+        \]
+    \end{observation}
+
+\subsection{Metodi del primo ordine}
+    Questi metodi si basano sulle derivate prime delle loss-function, ovvero guardano
+    a quali sono le direzioni negative nello spazio dei parametri. Un punto di partenza
+    \underline{deve} essere specificato e viene chiamato \( \ve{\theta}_0 \).
+    Per ogni iterazione \(t\) i parametri vengono aggiornati come:
+    \begin{equation}
+        \ve{\theta}_{t+1} = \ve{\theta}_t + \eta_t \ve{d}_t,
+    \end{equation}
+    ove \( \eta_t \) è detta \im{step size} o \im{learning rate}, che in
+    sequenza \( \left\{ \eta_t \right\} \) identifica il \im{learning rate
+    schedule}. Mentre \( \ve{d}_t \) è la \im{descent direction}. Come descent
+    direction si può usare la \im{steepest descent}:
+    \begin{equation}\label{eq:steepest descent}
+        \ve{g}_t = \nabla_{\ve{\theta}} \mathcal{L}\left( \ve{\theta} \right)|_{\ve{\theta}_t} \quad \longrightarrow \quad  \ve{d}_t = -\ve{g}_t.
+    \end{equation}
+    Il gradiente \( \ve{g}_t \) punta nella
+    direzionedi massima variazione di \( \mathcal{L}\left( \ve{\theta}_t \right) \)
+    quindi questa scelta sembra ovvia.
+
+    L'algoritmo viene iterato fino a quando non si raggiunge un punto stazionario.
+    Formalmente richiediamo che esista \( \eta_{\text{max}} > 0 \) tale che
+    \( \mathcal{L} \left( \ve{\theta} + \eta\ve{d} \right) < \mathcal{L}\left( \ve{\theta} \right) \,
+    \forall\eta : 0<\eta<\eta_{\text{max}}  \). 
+
+    La scelta più semplice è \( \eta = \text{const.} \), tuttavia se \( \eta \) è troppo grande
+    il metodo potrebbe non convergere, mentre se è troppo piccolo la convergenza potrebbe
+    essere troppo lenta.
 
 \end{document}
