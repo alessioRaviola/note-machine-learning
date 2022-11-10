@@ -1097,6 +1097,49 @@ Il processo che seguiamo è quindi il seguente:
 
     La scelta più semplice è \( \eta = \text{const.} \), tuttavia se \( \eta \) è troppo grande
     il metodo potrebbe non convergere, mentre se è troppo piccolo la convergenza potrebbe
-    essere troppo lenta.
+    essere troppo lenta. In genere è meglio scegliere \( \eta \) in modo adattivo, così da
+    avere la massima riduzione della loss function lungo la direzione scelta:
+    \begin{equation}
+        \eta_t = \argmin_{\eta > 0} \Phi_t \left( \eta \right) = \argmin_{\eta > 0}\mathcal{L} \left( \ve{\theta}_t + \eta d\ve{t} \right).
+    \end{equation}
+    Questo approccio è detto \im{line search} poichè cerchiamo lungo la direzione
+    identificata da \( d\ve{t} \).
+
+    Vogliamo inoltre usare algoritmi che convergono rapidamente. Nel caso la loss function
+    sia convessa si può mostrare che la gradient descent converge con tasso lineare:
+    \begin{equation}
+        \left| \mathcal{L}\left( \ve{\theta}_{t+1} \right) \right| \leq \mu \left| \mathcal{L}\left( \ve{\theta}_t \right) - \mathcal{L}\left( \shat{\ve{\theta}} \right) \right|,
+    \end{equation}
+    con \( 0 < \mu < 1 \) il tasso di convergenza.
+
+    Il metodo di gradient descent può però essere molto insufficiente qualora
+    ci si trovi in direzioni piatte. Una tecnica nota come \im{metodo dei momenti} o
+    della palla pesata permette di risolvere questo problema. Questa prescrive di muoversi
+    velocemente lungo direzioni piatte, in base alle iterazioni precedenti,
+    e lentamente ove il gradiente cambia rapidamente. Si scrivono le quantità
+    \begin{equation}
+        \ve{m}_t = \beta \ve{m}_{t-1} + \ve{g}_{t-1} \quad\text{e}\quad \ve{\theta}_t = \ve{\theta}_{t-1} - \eta_t \ve{m}_t,
+    \end{equation}
+    dove \( \ve{m}_t \) è la \textit{quantità di moto} e \( 0 < \beta < 1 \),
+    tipicamente \( \beta \sim 0.9 \). Sostituendo \( \ve{m}_{t-1} \), poi \( \ve{m}_{t-2} \)
+    e così via, otteniamo una definizione per la quantità di moto come serie:
+    \begin{equation}
+        \ve{m}_t = \beta \ve{m}_{t-1} + \ve{g}_{t-1} = \beta^2 \ve{m}_{t-2} + \beta \ve{g}_{t-2} + \ve{g}_{t-1}
+        = \sum_{\tau=0}^{t-1} \beta^\tau \ve{g}_{t-\tau-1}.
+    \end{equation}
+
+    Se tutti i gradienti nel passato sono costanti, allota:
+    \begin{itemize}
+        \item \( \ve{m}_t = \ve{g}\sum_{\tau=0}^{t-1} \beta^\tau \) e lo scaling factor è una serie geometrica;
+        \item \( \lim_{t\rightarrow\infty} \sum_{\tau=0}^{t-1}\beta^\tau = \frac{1}{1-\beta} \) e quindi se \( \beta \sim 0.9 \)
+            moltiplichiamo il gradiente per 10.
+    \end{itemize}
+
+\subsection{Metodi del second'ordine}
+    Il classico metodo alle derivate seconde è il \im{metodo di Newton}. Questo consiste
+    nell'aggiornare i parametri come:
+    \begin{equation}
+        
+    \end{equation}
 
 \end{document}
